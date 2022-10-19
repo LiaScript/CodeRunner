@@ -1,0 +1,8 @@
+version: '3'
+services:
+  coderunner:
+    image: liascript/coderunner:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - CODERUNNER_HOST=0.0.0.0
