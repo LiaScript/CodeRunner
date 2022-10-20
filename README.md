@@ -53,7 +53,7 @@ window.CodeRunner = {
         this.ws.send(JSON.stringify(message))
     }
 }
-window.CodeRunner.init("ws://localhost:8000/")
+window.CodeRunner.init("wss://139.20.18.165:8000/")
 @end
 
 
