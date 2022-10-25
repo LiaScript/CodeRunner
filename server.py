@@ -354,7 +354,7 @@ def message_received(client, _, message) -> None:
                 {"ok": True,
                  "service": "stdout",
                  "uid": message["uid"],
-                 "data": escape_ansi(data)}))
+                 "data": data}))
 
         def stop(error_message: str | None = None, images=[]):
             resp = {"ok": True, "service": "stop", "uid": message["uid"]}
