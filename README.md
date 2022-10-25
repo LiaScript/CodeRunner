@@ -72,7 +72,7 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
-@LIA.dotnet:  @LIA.dotnet_(@uit)
+@LIA.dotnet:  @LIA.dotnet_(@uid)
 
 @LIA.dotnet_
 <script>
