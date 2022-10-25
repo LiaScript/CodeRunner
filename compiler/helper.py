@@ -7,7 +7,7 @@ import subprocess
 from typing import Tuple, List, Any, TypedDict
 
 
-prefix = "firejail --noroot --private --quiet --cpu=1 --nonewprivs --nogroups --nice=19 --hostname=host --net=none --no3d --nosound --x11=none --rlimit-cpu=1 -- timeout 60 "
+prefix = "firejail --noroot --private --quiet --cpu=1 --nonewprivs --nogroups --nice=19 --hostname=host --net=none --no3d --nosound --x11=none --rlimit-cpu=1 -- timeout 300 "
 
 
 Problem = TypedDict("Problem", {"file": str,
