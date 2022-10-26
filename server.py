@@ -11,7 +11,7 @@ import coloredlogs
 from websocket_server import WebsocketServer
 import pexpect
 import compiler
-from compiler.helper import run_command, prefix, escape_ansi
+from compiler.helper import run_command, prefix
 
 
 coloredlogs.install()
@@ -77,6 +77,7 @@ class Process:
         Receive strings that should be send to stdin of a running process.
         '''
         self.stdin.append(stdin)
+        print("Stdin", stdin)
 
     def spawn(self) -> None:
         '''
@@ -85,6 +86,7 @@ class Process:
         while self.read_line() or self.is_alive():
             try:
                 if len(self.stdin) > 0:
+                    print("input", self.stdin)
                     input_string = self.stdin.pop(0)
 
                     if input_string.endswith("\n"):
@@ -321,6 +323,9 @@ def message_received(client, _, message) -> None:
     '''
 
     logging.debug("Client with id %s received: %s", client["id"], message)
+
+    if message == "ping":
+        return
 
     message = json.loads(message)
 
