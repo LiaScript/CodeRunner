@@ -19,9 +19,13 @@ window.CodeRunner = {
         const self = this
         this.ws.onopen = function () {
             self.log("connections established");
+            setInterval(function() {
+                self.ws.send("ping")
+            }, 15000);
         }
         this.ws.onmessage = function (e) {
             // e.data contains received string.
+
             let data
             try {
                 data = JSON.parse(e.data)
@@ -53,7 +57,10 @@ window.CodeRunner = {
         this.ws.send(JSON.stringify(message))
     }
 }
+
 window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
+// window.CodeRunner.init("ws://127.0.0.1:8000/")
+
 @end
 
 
@@ -67,7 +74,7 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.mono:    @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.python:  @LIA.python3
 @LIA.python2: @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
-@LIA.python3: @LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.pyc`)
+@LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 @LIA.r:       @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
