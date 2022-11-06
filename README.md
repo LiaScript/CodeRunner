@@ -59,7 +59,7 @@ window.CodeRunner = {
 }
 
 window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-// window.CodeRunner.init("ws://127.0.0.1:8000/")
+//window.CodeRunner.init("ws://127.0.0.1:8000/")
 
 @end
 
@@ -72,6 +72,7 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.java:    @LIA.eval(`["@0.java"]`, `javac @0.java`, `java @0`)
 @LIA.julia:   @LIA.eval(`["main.jl"]`, `none`, `julia main.jl`)
 @LIA.mono:    @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
+@LIA.nasm:    @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
 @LIA.python:  @LIA.python3
 @LIA.python2: @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
 @LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
@@ -589,6 +590,35 @@ namespace check1
 }
 ```
 @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
+
+
+### `@LIA.nasm`: Assembly
+
+
+```asm
+; ----------------------------------------------------------------------------------------
+; Writes "Hello, World" to the console using only system calls. Runs on 64-bit Linux only.
+; To assemble and run:
+;
+;     nasm -felf64 main.asm && ld main.o && ./a.out
+; ----------------------------------------------------------------------------------------
+
+          global    _start
+
+          section   .text
+_start:   mov       rax, 1                  ; system call for write
+          mov       rdi, 1                  ; file handle 1 is stdout
+          mov       rsi, message            ; address of string to output
+          mov       rdx, 13                 ; number of bytes
+          syscall                           ; invoke operating system to do the write
+          mov       rax, 60                 ; system call for exit
+          xor       rdi, rdi                ; exit code 0
+          syscall                           ; invoke operating system to exit
+
+          section   .data
+message:  db        "Hello, World", 10      ; note the newline at the end
+```
+@LIA.eval(`["main.asm"]`, `nasm  -felf64 main.asm && ld main.o`, `./a.out`)
 
 
 ### `@LIA.nim`: Nim

@@ -13,7 +13,7 @@ import coloredlogs
 from websocket_server import WebsocketServer
 import pexpect
 import compiler
-from compiler.helper import run_command, prefix
+from compiler.helper import run_command, prefix, escape_ansi
 
 coloredlogs.install()
 
@@ -360,7 +360,7 @@ def message_received(client, _, message) -> None:
                 {"ok": True,
                  "service": "stdout",
                  "uid": message["uid"],
-                 "data": data}))
+                 "data": escape_ansi(data)}))
 
         def stop(error_message: str | None = None, images=[]):
             resp = {"ok": True, "service": "stop", "uid": message["uid"]}
