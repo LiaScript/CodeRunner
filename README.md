@@ -443,6 +443,29 @@ Console.WriteLine("Hello, World!");
 ```
 @LIA.dotnet
 
+### F#
+
+```fsharp    +Program.fs
+// See https://aka.ms/new-console-template for more information
+printfn "Hello from F#"
+```
+```xml       -project.fsporj
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
+```
+@LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
+
+
 
 ### `@LIA.ghc`: Haskell
 
