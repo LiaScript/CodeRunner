@@ -646,7 +646,7 @@ for i in range(10):
 for i in range(10):
   print("Hallo Welt", i)
 ```
-@LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.pyc`)
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 
 
 ### `@LIA.r`: R
