@@ -55,6 +55,8 @@ RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
     && sh init.sh -y \
     && ln -s /root/.nimble/bin/nim /usr/local/bin/nim
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nasm
+
 
 COPY . /coderunner
 WORKDIR "/coderunner"

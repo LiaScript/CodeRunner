@@ -98,12 +98,14 @@ def c_like_formatting(problems: List[Tuple[str, str, str, str]], kind: str) -> L
     return result
 
 
+ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+
+
 def escape_ansi(line):
     '''
     Remove ansi escape chars
     '''
     try:
-        ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
         return ansi_escape.sub('', line)
     except Exception as _:
         return line
