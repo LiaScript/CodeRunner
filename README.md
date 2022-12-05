@@ -80,109 +80,52 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
-@LIA.dotnet:  @LIA.dotnet_(@uid)
-
-@LIA.dotnet_
-<script>
-var uid = "@0"
-var files = []
-
-files.push(["project.csproj", `<Project Sdk="Microsoft.NET.Sdk">
+@LIA.dotnet
+```xml    -project.csproj
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-</Project>`])
-
-files.push(["Program.cs", `@input(0)`])
-
-send.handle("input", (e) => {
-    CodeRunner.send(uid, {stdin: e})
-})
-send.handle("stop",  (e) => {
-    CodeRunner.send(uid, {stop: true})
-});
-
-
-CodeRunner.handle(uid, function (msg) {
-    switch (msg.service) {
-        case 'data': {
-            if (msg.ok) {
-                CodeRunner.send(uid, {compile: "dotnet build -nologo"})
-            }
-            else {
-                send.lia("LIA: stop")
-            }
-            break;
-        }
-        case 'compile': {
-            if (msg.ok) {
-                if (msg.message) {
-                    if (msg.problems.length)
-                        console.warn(msg.message);
-                    else
-                        console.log(msg.message);
-                }
-
-                send.lia("LIA: terminal")
-                console.clear()
-                CodeRunner.send(uid, {exec: "dotnet run"})
-            } else {
-                send.lia(msg.message, msg.problems, false)
-                send.lia("LIA: stop")
-            }
-            break;
-        }
-        case 'stdout': {
-            if (msg.ok)
-                console.stream(msg.data)
-            else
-                console.error(msg.data);
-            break;
-        }
-
-        case 'stop': {
-            if (msg.error) {
-                console.error(msg.error);
-            }
-
-            if (msg.images) {
-                for(let i = 0; i < msg.images.length; i++) {
-                    console.html("<hr/>", msg.images[i].file)
-                    console.html("<img title='" + msg.images[i].file + "' src='" + msg.images[i].data + "' onclick='window.LIA.img.click(\"" + msg.images[i].data + "\")'>")
-                }
-
-            }
-
-            send.lia("LIA: stop")
-            break;
-        }
-
-        default:
-            console.log(msg)
-            break;
-    }
-})
-
-
-CodeRunner.send(
-    uid, { "data": files }
-);
-
-"LIA: wait"
-</script>
+</Project>
+```
+@LIA.eval(`["Program.cs","project.csproj"]`, `dotnet build -nologo`, `dotnet run`)
 @end
 
-@LIA.eval:  @LIA.eval_(false,@uid,`@0`,@1,@2)
+@LIA.dotnetFsharp
+```xml    -project.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>
+```
+@LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
+@end
 
-@LIA.evalWithDebug: @LIA.eval_(true,@uid,`@0`,@1,@2)
+@LIA.eval:  @LIA.eval_(false,`@0`,@1,@2)
+
+@LIA.evalWithDebug: @LIA.eval_(true,`@0`,@1,@2)
 
 @LIA.eval_
 <script>
-const uid = "@1"
-var order = @2
+function random(len=16) {
+    let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let str = '';
+    for (let i = 0; i < len; i++) {
+        str += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return str;
+}
+
+const uid = random()
+var order = @1
 var files = []
 
 if (order[0])
@@ -219,7 +162,7 @@ CodeRunner.handle(uid, function (msg) {
     switch (msg.service) {
         case 'data': {
             if (msg.ok) {
-                CodeRunner.send(uid, {compile: @3})
+                CodeRunner.send(uid, {compile: @2})
             }
             else {
                 send.lia("LIA: stop")
@@ -236,7 +179,7 @@ CodeRunner.handle(uid, function (msg) {
                 }
 
                 send.lia("LIA: terminal")
-                CodeRunner.send(uid, {exec: @4})
+                CodeRunner.send(uid, {exec: @3})
 
                 if(!@0) {
                   console.clear()
@@ -318,7 +261,7 @@ and change it, as you wish.
 	                        {{1}}
 1. Load the macros via
 
-   `import: https://github.com/liascript/CodeRunner`
+   `import: https://raw.githubusercontent.com/LiaScript/CodeRunner/master/README.md`
 
 2. Copy the definitions into your Project
 
@@ -465,6 +408,13 @@ printfn "Hello from F#"
 ```
 @LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
 
+---
+
+```fsharp    +Program.fs
+// See https://aka.ms/new-console-template for more information
+printfn "Hello from F#"
+```
+@LIA.dotnetFsharp
 
 
 ### `@LIA.ghc`: Haskell
@@ -790,7 +740,7 @@ raw file of this document.
 
 {{1}} https://raw.githubusercontent.com/liaScript/CodeRunner/master/README.md
 
-``` js
+```` js
 onload
 window.CodeRunner = {
     ws: undefined,
@@ -801,9 +751,13 @@ window.CodeRunner = {
         const self = this
         this.ws.onopen = function () {
             self.log("connections established");
+            setInterval(function() {
+                self.ws.send("ping")
+            }, 15000);
         }
         this.ws.onmessage = function (e) {
             // e.data contains received string.
+
             let data
             try {
                 data = JSON.parse(e.data)
@@ -835,7 +789,10 @@ window.CodeRunner = {
         this.ws.send(JSON.stringify(message))
     }
 }
-window.CodeRunner.init("ws://localhost:8000/")
+
+window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
+//window.CodeRunner.init("ws://127.0.0.1:8000/")
+
 @end
 
 
@@ -847,108 +804,60 @@ window.CodeRunner.init("ws://localhost:8000/")
 @LIA.java:    @LIA.eval(`["@0.java"]`, `javac @0.java`, `java @0`)
 @LIA.julia:   @LIA.eval(`["main.jl"]`, `none`, `julia main.jl`)
 @LIA.mono:    @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
+@LIA.nasm:    @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
 @LIA.python:  @LIA.python3
 @LIA.python2: @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
-@LIA.python3: @LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.pyc`)
+@LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 @LIA.r:       @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
-@LIA.dotnet:  @LIA.dotnet_(@uit)
-
-@LIA.dotnet_
-<script>
-var uid = "@0"
-var files = []
-
-files.push(["project.csproj", `<Project Sdk="Microsoft.NET.Sdk">
+@LIA.dotnet
+```xml    -project.csproj
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-</Project>`])
-
-files.push(["Program.cs", `@input(0)`])
-
-send.handle("input", (e) => {
-    CodeRunner.send(uid, {stdin: e})
-})
-send.handle("stop",  (e) => {
-    CodeRunner.send(uid, {stop: true})
-});
-
-
-CodeRunner.handle(uid, function (msg) {
-    switch (msg.service) {
-        case 'data': {
-            if (msg.ok) {
-                CodeRunner.send(uid, {compile: "dotnet build -nologo"})
-            }
-            else {
-                send.lia("LIA: stop")
-            }
-            break;
-        }
-        case 'compile': {
-            if (msg.ok) {
-                if (msg.message) {
-                    if (msg.problems.length)
-                        console.warn(msg.message);
-                    else
-                        console.log(msg.message);
-                }
-                send.lia("LIA: terminal")
-                console.clear()
-                CodeRunner.send(uid, {exec: "dotnet run"})
-            } else {
-                send.lia(msg.message, msg.problems, false)
-                send.lia("LIA: stop")
-            }
-            break;
-        }
-        case 'stdout': {
-            if (msg.ok)
-                console.stream(msg.data)
-            else
-                console.error(msg.data);
-            break;
-        }
-        case 'stop': {
-            if (msg.error) {
-                console.error(msg.error);
-            }
-            if (msg.images) {
-                for(let i = 0; i < msg.images.length; i++) {
-                    console.html("<hr/>", msg.images[i].file)
-                    console.html("<img title='" + msg.images[i].file + "' src='" + msg.images[i].data + "' onclick='window.LIA.img.click(\"" + msg.images[i].data + "\")'>")
-                }
-            }
-            send.lia("LIA: stop")
-            break;
-        }
-
-        default:
-            console.log(msg)
-            break;
-    }
-})
-
-CodeRunner.send(uid, { "data": files });
-
-"LIA: wait"
-</script>
+</Project>
+```
+@LIA.eval(`["Program.cs","project.csproj"]`, `dotnet build -nologo`, `dotnet run`)
 @end
 
-@LIA.eval:  @LIA.eval_(false,@uid,`@0`,@1,@2)
+@LIA.dotnetFsharp
+```xml    -project.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>
+```
+@LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
+@end
 
-@LIA.evalWithDebug: @LIA.eval_(true,@uid,`@0`,@1,@2)
+@LIA.eval:  @LIA.eval_(false,`@0`,@1,@2)
+
+@LIA.evalWithDebug: @LIA.eval_(true,`@0`,@1,@2)
 
 @LIA.eval_
 <script>
-const uid = "@1"
-var order = @2
+function random(len=16) {
+    let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let str = '';
+    for (let i = 0; i < len; i++) {
+        str += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return str;
+}
+
+const uid = random()
+var order = @1
 var files = []
 
 if (order[0])
@@ -985,7 +894,7 @@ CodeRunner.handle(uid, function (msg) {
     switch (msg.service) {
         case 'data': {
             if (msg.ok) {
-                CodeRunner.send(uid, {compile: @3})
+                CodeRunner.send(uid, {compile: @2})
             }
             else {
                 send.lia("LIA: stop")
@@ -1002,7 +911,7 @@ CodeRunner.handle(uid, function (msg) {
                 }
 
                 send.lia("LIA: terminal")
-                CodeRunner.send(uid, {exec: @4})
+                CodeRunner.send(uid, {exec: @3})
 
                 if(!@0) {
                   console.clear()
@@ -1020,16 +929,20 @@ CodeRunner.handle(uid, function (msg) {
                 console.error(msg.data);
             break;
         }
+
         case 'stop': {
             if (msg.error) {
                 console.error(msg.error);
             }
+
             if (msg.images) {
                 for(let i = 0; i < msg.images.length; i++) {
                     console.html("<hr/>", msg.images[i].file)
                     console.html("<img title='" + msg.images[i].file + "' src='" + msg.images[i].data + "' onclick='window.LIA.img.click(\"" + msg.images[i].data + "\")'>")
                 }
+
             }
+
             send.lia("LIA: stop")
             break;
         }
@@ -1040,10 +953,13 @@ CodeRunner.handle(uid, function (msg) {
     }
 })
 
-CodeRunner.send(uid, { "data": files });
+
+CodeRunner.send(
+    uid, { "data": files }
+);
 
 "LIA: wait"
 </script>
 @end
-```
+````
 
