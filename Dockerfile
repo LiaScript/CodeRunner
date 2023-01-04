@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
 RUN DEBIAN_FRONTEND=noninteractive pip3 install matplotlib \
-    numpy
+    numpy \
     pandas
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python2.7
