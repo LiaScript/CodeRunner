@@ -7,6 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y curl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gcc
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y g++
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y make
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
@@ -59,6 +60,10 @@ RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y nasm
 
+RUN git clone https://github.com/vlang/v
+RUN cd v &&\
+    make && \
+    ./v symlink
 
 COPY . /coderunner
 WORKDIR "/coderunner"

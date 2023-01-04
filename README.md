@@ -78,6 +78,7 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 @LIA.r:       @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
+@LIA.v:       @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
 @LIA.dotnet
@@ -672,6 +673,12 @@ pub fn main() void {
 ```
 @LIA.zig
 
+### `@LIA.v`: v
+
+```v
+println("Hello World")
+```
+@LIA.v
 
 ## `@LIA.evalWithDebug`
 
@@ -810,6 +817,7 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 @LIA.r:       @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
+@LIA.v:       @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
 @LIA.dotnet
