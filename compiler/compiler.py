@@ -11,6 +11,19 @@ def run(cmd: str, working_directory: str, files: List[str]) -> Response2:
     if cmd.startswith("gcc ") or cmd.startswith("clang ") or cmd.startswith("g++ ") or cmd.startswith("zig "):
         rslt = c.run(cmd, working_directory)
 
+    elif cmd.startswith("v "):
+        # will use the v command for compiling
+        rslt = c.run(cmd, working_directory)
+        problems = []
+
+        # ... but will correct the output
+        for p in rslt["problems"]:
+            p["row"] -= 1
+
+            problems.append(p)
+
+        rslt["problems"] = problems
+
     elif cmd.startswith("dotnet "):
         rslt = dotnet.run(cmd, working_directory)
 
