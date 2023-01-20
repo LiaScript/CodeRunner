@@ -71,6 +71,6 @@ WORKDIR "/coderunner"
 
 RUN pip3 install -r requirements.txt
 
-EXPOSE 8000
+#EXPOSE 8000
 
-ENTRYPOINT python3 -m server
+CMD python3 -m server --host 0.0.0.0 --port $PORT
