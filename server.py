@@ -7,12 +7,13 @@ import logging
 from typing import List
 import pathlib
 import base64
+import getopt
+import sys
 import coloredlogs
 from websocket_server import WebsocketServer
 import pexpect
 import compiler
 from compiler.helper import run_command, prefix, escape_ansi
-
 
 coloredlogs.install()
 
@@ -382,18 +383,42 @@ def message_received(client, _, message) -> None:
         server.send_message(client, json.dumps({"ok": True, "service": "stop", "uid": message["uid"]}))
 
 
-PORT = int(os.environ.get('CODERUNNER_PORT') or '8000')
-HOST = os.environ.get('CODERUNNER_HOST') or '127.0.0.1'
+if __name__ == "__main__":
+    argv = sys.argv[1:]
 
+    PORT = int(os.environ.get('CODERUNNER_PORT') or '8000')
+    HOST = os.environ.get('CODERUNNER_HOST') or '127.0.0.1'
 
-server = WebsocketServer(host=HOST, port=PORT)
+    options, args = getopt.getopt(argv, "p:h", ["port=", "host=", "help"])
 
-server.set_fn_new_client(new_client)
-server.set_fn_client_left(client_left)
-server.set_fn_message_received(message_received)
+    for opt, arg in options:
+        if opt in ('-p', '--port'):
+            PORT = int(arg)
+        elif opt == "--host":
+            HOST = arg
+        elif opt in ("-h", "--help"):
+            print("CodeRunner")
+            print()
+            print("  This service is meant to be used with LiaScript and its CodeRunner implementation in")
+            print("  order to run execute small peaces of code as a web-service.")
+            print()
+            print("Options:")
+            print()
+            print("  -h, --help   Print out the help")
+            print("  -p, --port   Set the server port, this will overwrite the env-variable CODERUNNER_PORT")
+            print("               ... defaults to 8000")
+            print("  --host       Set the server host, this will overwrite the env-variable CODERUNNER_HOST")
+            print("               ... defaults to 127.0.0.1")
+            exit(0)
 
-logging.basicConfig(level=logging.DEBUG)
+    server = WebsocketServer(host=HOST, port=PORT)
 
-logging.info("starting server on %s:%s", HOST, PORT)
+    server.set_fn_new_client(new_client)
+    server.set_fn_client_left(client_left)
+    server.set_fn_message_received(message_received)
 
-server.run_forever()
+    logging.basicConfig(level=logging.DEBUG)
+
+    logging.info("starting server on %s:%s", HOST, PORT)
+
+    server.run_forever()

@@ -57,10 +57,15 @@ window.CodeRunner = {
         this.ws.send(JSON.stringify(message))
     }
 }
+<<<<<<< HEAD
 
 window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 //window.CodeRunner.init("ws://127.0.0.1:8000/")
 
+=======
+//window.CodeRunner.init("ws://localhost:8000/")
+window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
+>>>>>>> main
 @end
 
 
