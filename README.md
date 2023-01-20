@@ -57,15 +57,10 @@ window.CodeRunner = {
         this.ws.send(JSON.stringify(message))
     }
 }
-<<<<<<< HEAD
 
-window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
+//window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 //window.CodeRunner.init("ws://127.0.0.1:8000/")
-
-=======
-//window.CodeRunner.init("ws://localhost:8000/")
 window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
->>>>>>> main
 @end
 
 
@@ -976,3 +971,54 @@ CodeRunner.send(
 @end
 ````
 
+## Deployment
+
+### Heroku
+
+Change the Dockerfile to:
+
+``` yaml
+...
+# EXPOSE 8000
+
+# ENTRYPOINT python3 -m server
+CMD python3 -m server --host 0.0.0.0 --port $PORT
+```
+
+The host has to be set to `0.0.0.0` and the port is set by heroku itself.
+
+Afterwards repeat the following steps:
+
+``` bash
+$ heroku container:login
+  ...
+  Login Succeeded
+
+$ heroku create
+  Creating app... done, ⬢ XXXXXX-XXXXXXX-XXXXXX
+  https://XXXXXX-XXXXXXX-XXXXXX.herokuapp.com/ | https://git.heroku.com/XXXXXX-XXXXXXX-XXXXXX.git
+
+$ heroko container:push web
+  === Building web (.../CodeRunner/Dockerfile)
+  Sending build context to Docker daemon  4.633MB
+  Step 1/35 : FROM ubuntu:kinetic
+   ---> d6547859cd2f
+  Step 2/35 : RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
+   ---> Using cache
+  ...
+  
+  Step 35/35 : CMD python3 -m server --host 0.0.0.0 --port $PORT
+   ---> Running in bde2634a12ba
+  ...
+  
+  Successfully built 50ec74c6e81f
+  Successfully tagged registry.heroku.com/XXXXXX-XXXXXXX-XXXXXX/web:latest
+  === Pushing web (.../CodeRunner/Dockerfile)
+  Using default tag: latest
+  The push refers to repository [registry.heroku.com/XXXXXX-XXXXXXX-XXXXXX/web]
+  ...
+  Your image has been successfully pushed. You can now release it with the 'container:release' command.
+
+$ heroku container:release web
+  Releasing images web to XXXXXX-XXXXXXX-XXXXXX... done 
+```
