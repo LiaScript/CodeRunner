@@ -58,15 +58,9 @@ window.CodeRunner = {
     }
 }
 
-<<<<<<< HEAD
 window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 //window.CodeRunner.init("ws://127.0.0.1:8000/")
 
-=======
-//window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-//window.CodeRunner.init("ws://127.0.0.1:8000/")
-window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
->>>>>>> master
 @end
 
 
