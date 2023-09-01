@@ -16,14 +16,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y make
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
-RUN DEBIAN_FRONTEND=noninteractive pip3 install \
-    matplotlib \
-    numpy \
-    pandas \
-    scipy
-
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python2.7
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail
@@ -73,6 +65,15 @@ RUN git clone https://github.com/vlang/v
 RUN cd v &&\
     make && \
     ./v symlink
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pip
+RUN DEBIAN_FRONTEND=noninteractive pip3 install \
+    matplotlib \
+    numpy \
+    opencv-python opencv-contrib-python\
+    pandas \
+    scipy
 
 COPY . /coderunner
 WORKDIR "/coderunner"
