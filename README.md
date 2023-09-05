@@ -640,7 +640,25 @@ for i in range(10):
 for i in range(10):
   print("Hallo Welt", i)
 ```
-@LIA.eval(`["main.py"]`, `none`, `python3 main.py`, `*`)
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`, `*.py`)
+
+
+```text -data.csv 
+A,B,C
+0,0.1,3
+1,0.3,5
+2,0.4,2
+```
+```python readCSV.py
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('data.csv', header = 0)  
+df.plot.scatter(x='A', y='B')
+plt.savefig('temp.png')
+```
+@LIA.eval(`["data.csv", "main.py"]`, `none`, `python3 main.py`, `*`)
+
 
 
 ### `@LIA.r`: R
