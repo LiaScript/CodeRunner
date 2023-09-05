@@ -110,9 +110,9 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
 @end
 
-@LIA.eval:  @LIA.eval_(false,`@0`,@1,@2)
+@LIA.eval:  @LIA.eval_(false,`@0`,@1,@2,@3)
 
-@LIA.evalWithDebug: @LIA.eval_(true,`@0`,@1,@2)
+@LIA.evalWithDebug: @LIA.eval_(true,`@0`,@1,@2,@3)
 
 @LIA.eval_
 <script>
@@ -125,9 +125,19 @@ function random(len=16) {
     return str;
 }
 
+
+
 const uid = random()
 var order = @1
 var files = []
+
+var pattern = "@4".trim()
+
+if (pattern.startsWith("\`")){
+  pattern = pattern.slice(1,-1)
+} else if (pattern.length === 2 && pattern[0] === "@") {
+  pattern = null
+}
 
 if (order[0])
   files.push([order[0], `@'input(0)`])
@@ -180,7 +190,7 @@ CodeRunner.handle(uid, function (msg) {
                 }
 
                 send.lia("LIA: terminal")
-                CodeRunner.send(uid, {exec: @3})
+                CodeRunner.send(uid, {exec: @3, filter: pattern})
 
                 if(!@0) {
                   console.clear()
@@ -209,8 +219,18 @@ CodeRunner.handle(uid, function (msg) {
                     console.html("<hr/>", msg.images[i].file)
                     console.html("<img title='" + msg.images[i].file + "' src='" + msg.images[i].data + "' onclick='window.LIA.img.click(\"" + msg.images[i].data + "\")'>")
                 }
-
             }
+
+            if (msg.files) {
+                let str = "<hr/>"
+                for(let i = 0; i < msg.files.length; i++) {
+                    str += `<a href='data:application/octet-stream${msg.files[i].data}' download="${msg.files[i].file}">${msg.files[i].file}</a> `
+                }
+
+                console.html(str)
+            }
+
+            window.console.warn(msg)
 
             send.lia("LIA: stop")
             break;
@@ -620,7 +640,7 @@ for i in range(10):
 for i in range(10):
   print("Hallo Welt", i)
 ```
-@LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`, `*`)
 
 
 ### `@LIA.r`: R
