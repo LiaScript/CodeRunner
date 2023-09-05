@@ -14,6 +14,8 @@ from websocket_server import WebsocketServer
 import pexpect
 import compiler
 from compiler.helper import run_command, prefix, escape_ansi
+import fnmatch
+
 
 coloredlogs.install()
 
@@ -23,12 +25,13 @@ class Process:
     A process is a running execution within a thread, that sends back received inputs from stdin.
     '''
 
-    def __init__(self, current_directory: str, cmd: str, callback, stop):
+    def __init__(self, current_directory: str, cmd: str, filter_files: str | None, callback, stop):
         self.stdin: List[str] = []
         self.current_directory = current_directory
         self.callback = callback
         self.stop = stop
         self.error = None
+        self.filter = filter_files
 
         try:
             self.process = pexpect.spawn(cmd, cwd=current_directory, echo=False, encoding="utf-8")
@@ -78,7 +81,6 @@ class Process:
         Receive strings that should be send to stdin of a running process.
         '''
         self.stdin.append(stdin)
-        print("Stdin", stdin)
 
     def spawn(self) -> None:
         '''
@@ -87,13 +89,13 @@ class Process:
         while self.read_line() or self.is_alive():
             try:
                 if len(self.stdin) > 0:
-                    print("input", self.stdin)
                     input_string = self.stdin.pop(0)
 
                     if input_string.endswith("\n"):
                         input_string = input_string[0:-1]
 
                     self.process.sendline(input_string)
+
                     # self.process.expect(input_string)
             except Exception as _:
                 pass
@@ -103,7 +105,30 @@ class Process:
 
         self.process.close()
 
-        self.stop(None, self.list_images())
+        self.stop(None, self.list_images(), self.filter_files())
+
+    def filter_files(self):
+        '''
+        Filter all files within the regular expression in self.filter and return them as base46.
+        '''
+
+        if self.filter is None:
+            return []
+
+        files = fnmatch.filter(os.listdir(self.current_directory), self.filter)
+
+        files = list(map(lambda filename: self.current_directory + "/" + filename, files))
+
+        files = sorted(filter(os.path.isfile, files), key=os.path.getmtime, reverse=True)
+
+        blobs = []
+        for filename in files:
+            extension = pathlib.Path(filename).suffix.lower()[1:]
+
+            with open(filename, "rb") as blob_file:
+                blobs += [{"file": pathlib.Path(filename).name, "data": ";base64," + base64.b64encode(blob_file.read()).decode("utf8")}]
+
+        return blobs
 
     def list_images(self):
         '''
@@ -164,10 +189,11 @@ class Project:
         self.process: Process | None
         self.thread: Thread | None
 
+
     def __del__(self):
         self.destroy()
 
-    def exec(self, cmd: str, stdin, stop):
+    def exec(self, cmd: str, filter_files: str | None, stdin, stop):
         '''
         This will spawn a new and persistent process, that will run in background.
         It will send continuos messages back to the web-socket connection and a
@@ -182,9 +208,9 @@ class Project:
         cmd = cmd.lstrip()
 
         if cmd.startswith("dotnet "):
-            self.process = Process(self.dir, "timeout 60 nice -19 " + cmd, stdin, stop)
+            self.process = Process(self.dir, "timeout 60 nice -19 " + cmd, filter_files, stdin, stop)
         else:
-            self.process = Process(self.dir, prefix + cmd, stdin, stop)
+            self.process = Process(self.dir, prefix + cmd, filter_files, stdin, stop)
 
         if self.process.error:
             stop(self.process.error)
@@ -362,7 +388,7 @@ def message_received(client, _, message) -> None:
                  "uid": message["uid"],
                  "data": escape_ansi(data)}))
 
-        def stop(error_message: str | None = None, images=[]):
+        def stop(error_message: str | None = None, images=[], files=[]):
             resp = {"ok": True, "service": "stop", "uid": message["uid"]}
 
             if error_message:
@@ -371,9 +397,12 @@ def message_received(client, _, message) -> None:
             if len(images) > 0:
                 resp["images"] = images
 
+            if len(files) > 0:
+                resp["files"] = files
+
             server.send_message(client, json.dumps(resp))
 
-        client["project"][message["uid"]].exec(message["exec"], stdout, stop)
+        client["project"][message["uid"]].exec(message["exec"], message["filter"], stdout, stop)
 
     if "stdin" in message:
         client["project"][message["uid"]].input(message["stdin"])
