@@ -81,6 +81,9 @@ WORKDIR "/coderunner"
 
 RUN pip3 install -r requirements.txt
 
+RUN chmod u+s /usr/bin/firejail
+RUN firejail || true
+
 #EXPOSE 8000
 
 CMD python3 -m server --host 0.0.0.0 --port $PORT
