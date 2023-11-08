@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    LiaScript@web.de
 
-version:  0.0.1
+version:  0.0.2
 
 language: en
 
@@ -13,12 +13,34 @@ onload
 window.CodeRunner = {
     ws: undefined,
     handler: {},
+    connected: false,
+    error: "",
+    url: "",
 
-    init(url) {
+    init(url, step = 0) {
+        this.url = url
+        if (step  >= 10) {
+           console.warn("could not establish connection")
+           this.error = "could not establish connection to => " + url
+           return
+        }
+
         this.ws = new WebSocket(url);
+
         const self = this
+        
+        const connectionTimeout = setTimeout(() => {
+          self.ws.close();
+          console.log("WebSocket connection timed out");
+        }, 5000);
+        
+        
         this.ws.onopen = function () {
+            clearTimeout(connectionTimeout);
             self.log("connections established");
+
+            self.connected = true
+            
             setInterval(function() {
                 self.ws.send("ping")
             }, 15000);
@@ -37,24 +59,65 @@ window.CodeRunner = {
             }
         }
         this.ws.onclose = function () {
-            self.warn("connection closed")
+            clearTimeout(connectionTimeout);
+            self.connected = false
+            self.warn("connection closed ... reconnecting")
+
+            setTimeout(function(){
+                console.warn("....", step+1)
+                self.init(url, step+1)
+            }, 1000)
         }
         this.ws.onerror = function (e) {
-            self.warn("an error has occurred => ", e)
+            clearTimeout(connectionTimeout);
+            self.warn("an error has occurred")
         }
+
+
     },
     log(...args) {
-        console.log("CodeRunner:", ...args)
+        window.console.log("CodeRunner:", ...args)
     },
     warn(...args) {
-        console.warn("CodeRunner:", ...args)
+        window.console.warn("CodeRunner:", ...args)
     },
     handle(uid, callback) {
         this.handler[uid] = callback
     },
-    send(uid, message) {
-        message.uid = uid
-        this.ws.send(JSON.stringify(message))
+    send(uid, message, sender=null, restart=false) {
+        const self = this
+        if (this.connected) {
+          message.uid = uid
+          this.ws.send(JSON.stringify(message))
+        } else if (this.error) {
+
+          if(restart) {
+            sender.lia("LIA: terminal")
+            this.error = ""
+            this.init(this.url)
+            setTimeout(function() {
+              self.send(uid, message, sender, false)
+            }, 2000)
+
+          } else {
+            sender.lia("LIA: wait")
+            setTimeout(() => {
+              sender.lia(this.error)
+              sender.lia("LIA: stop")
+            }, 800)
+          }
+        } else {
+          
+          setTimeout(function() {
+            self.send(uid, message, sender, false)
+          }, 2000)
+          
+          if (sender) {
+            sender.lia("LIA: terminal")
+            sender.log("stream", "", ".")
+            sender.lia("LIA: terminal")
+          }
+        }
     }
 }
 
@@ -162,10 +225,10 @@ if (order[9])
 
 
 send.handle("input", (e) => {
-    CodeRunner.send(uid, {stdin: e})
+    CodeRunner.send(uid, {stdin: e}, send)
 })
 send.handle("stop",  (e) => {
-    CodeRunner.send(uid, {stop: true})
+    CodeRunner.send(uid, {stop: true}, send)
 });
 
 
@@ -173,7 +236,7 @@ CodeRunner.handle(uid, function (msg) {
     switch (msg.service) {
         case 'data': {
             if (msg.ok) {
-                CodeRunner.send(uid, {compile: @2})
+                CodeRunner.send(uid, {compile: @2}, send)
             }
             else {
                 send.lia("LIA: stop")
@@ -244,7 +307,7 @@ CodeRunner.handle(uid, function (msg) {
 
 
 CodeRunner.send(
-    uid, { "data": files }
+    uid, { "data": files }, send, true
 );
 
 "LIA: wait"
@@ -640,7 +703,25 @@ for i in range(10):
 for i in range(10):
   print("Hallo Welt", i)
 ```
-@LIA.eval(`["main.py"]`, `none`, `python3 main.py`, `*`)
+@LIA.eval(`["main.py"]`, `none`, `python3 main.py`, `*.py`)
+
+
+```text -data.csv 
+A,B,C
+0,0.1,3
+1,0.3,5
+2,0.4,2
+```
+```python readCSV.py
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('data.csv', header = 0)  
+df.plot.scatter(x='A', y='B')
+plt.savefig('temp.png')
+```
+@LIA.eval(`["data.csv", "main.py"]`, `none`, `python3 main.py`, `*`)
+
 
 
 ### `@LIA.r`: R

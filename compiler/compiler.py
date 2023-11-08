@@ -84,11 +84,12 @@ def formatting(files: List[str], problems) -> List[List[Problem2]]:
         index[file] = i
 
     for prob in problems:
-        rslt[index[prob["file"]]].append(
-            {"type": prob["type"],
-             "row": prob["row"],
-             "col": prob["col"],
-             "text": prob["text"]
-             })
+        if prob["file"]  in index:
+            rslt[index[prob["file"]]].append(
+                {"type": prob["type"],
+                "row": prob["row"],
+                "col": prob["col"],
+                "text": prob["text"]
+            })
 
     return rslt
