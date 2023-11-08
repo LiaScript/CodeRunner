@@ -990,8 +990,6 @@ CodeRunner.send(
 </script>
 @end
 ````
-<<<<<<< HEAD
-=======
 
 ## Deployment
 
@@ -1006,7 +1004,6 @@ Change the Dockerfile to:
 # ENTRYPOINT python3 -m server
 CMD python3 -m server --host 0.0.0.0 --port $PORT
 ```
->>>>>>> master
 
 The host has to be set to `0.0.0.0` and the port is set by heroku itself.
 
