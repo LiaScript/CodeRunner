@@ -1,6 +1,7 @@
-FROM ubuntu:kinetic
+FROM ubuntu:latest
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
+RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y curl
