@@ -82,7 +82,19 @@ WORKDIR "/coderunner"
 RUN pip3 install -r requirements.txt
 
 RUN chmod u+s /usr/bin/firejail
-RUN sudo firejail || true
+
+# For some reasons firejail needs to be run multiple times to work
+RUN firejail || true
+RUN firejail || true
+RUN firejail || true
+RUN firejail || true
+RUN firejail || true
+
+RUN firejail || true
+RUN firejail || true
+RUN firejail || true
+RUN firejail || true
+RUN firejail || true
 
 EXPOSE 8000
 
