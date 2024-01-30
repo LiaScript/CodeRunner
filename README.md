@@ -136,10 +136,12 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.julia:   @LIA.eval(`["main.jl"]`, `none`, `julia main.jl`)
 @LIA.mono:    @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.nasm:    @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
+@LIA.perl:    @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl main.pl`)
 @LIA.python:  @LIA.python3
 @LIA.python2: @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
 @LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
 @LIA.r:       @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
+@LIA.ruby:    @LIA.eval(`["main.rb"]`, `none`, `ruby main.rb`)
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.v:       @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.zig:     @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
@@ -781,6 +783,44 @@ println("Hello World")
 ```
 @LIA.v
 
+### `@LIA.perl`: Perl
+
+```perl
+print "Enter your name: ";
+$name=<STDIN>;
+print "Hello, ${name} ... you will soon be a Perl addict!\n";
+```
+@LIA.perl
+
+
+### `@LIA.ruby`: Ruby
+
+```ruby
+class HelloWorld
+   def initialize(name)
+      @name = name.capitalize
+   end
+   def sayHi
+      puts "Hello #{@name}!"
+   end
+end
+
+hello = HelloWorld.new("World")
+hello.sayHi
+```
+@LIA.ruby
+
+## Ada
+
+```ada
+with Ada.Text_IO; use Ada.Text_IO;
+procedure Main is
+begin
+   Put_Line ("Hello WORLD!");
+end Main;
+```
+@LIA.eval(`["main.ada"]`, `gnatmake main.ada`, `./main`)
+
 ## `@LIA.evalWithDebug`
 
 This does basically the same as `@LIA.eval`, but it will add additional
@@ -916,6 +956,7 @@ window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
 @LIA.python:  @LIA.python3
 @LIA.python2: @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
 @LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)
+@LIA.python3: @LIA.eval(`["main.pl"]`, `none`, `perl main.pl`)
 @LIA.r:       @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.rust:    @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.v:       @LIA.eval(`["main.v"]`, `v main.v`, `./main`)

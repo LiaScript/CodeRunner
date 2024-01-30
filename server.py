@@ -1,3 +1,4 @@
+from logging import WARNING
 from threading import Thread
 import os
 import shutil
@@ -10,14 +11,89 @@ import base64
 import getopt
 import sys
 import coloredlogs
-from websocket_server import WebsocketServer
+from websocket_server import WebsocketServer, WebSocketHandler
 import pexpect
 import compiler
 from compiler.helper import run_command, prefix, escape_ansi
 import fnmatch
-
+from socketserver import TCPServer
 
 coloredlogs.install()
+
+
+class NewWebSocketHandler (WebSocketHandler):
+    def read_http_headers(self):
+        headers = {}
+        # first line should be HTTP GET
+        http_get = self.rfile.readline().decode().strip()
+        
+        if not http_get.upper().startswith('GET'):
+            logging.warning("Unsupported HTTP method")
+            response = 'HTTP/1.1 400 Bad Request\r\n\r\n'
+            with self._send_lock:
+                self.request.sendall(response.encode())
+            self.keep_alive = False
+            return headers           
+                 
+        
+        #assert http_get.upper().startswith('GET')
+        # remaining should be headers
+        while True:
+            header = self.rfile.readline().decode().strip()
+            if not header:
+                break
+            head, value = header.split(':', 1)
+            headers[head.lower().strip()] = value.strip()
+        return headers
+
+    def handshake(self):
+        headers = self.read_http_headers()
+
+        if 'upgrade' in headers:
+            try:
+                assert headers['upgrade'].lower() == 'websocket'
+            except AssertionError:
+                self.keep_alive = False
+                return
+
+            try:
+                key = headers['sec-websocket-key']
+            except KeyError:
+                logging.warning("Client tried to connect but was missing a key")
+                self.keep_alive = False
+                return
+
+            response = self.make_handshake_response(key)
+            with self._send_lock:
+                self.handshake_done = self.request.send(response.encode())
+            self.valid_client = True
+            self.server._new_client_(self)
+        else:
+            # timeStr = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            # print(f"请升级到ws协议{timeStr}")
+            response = 'HTTP/1.1 400 Bad Request\r\n\r\n'
+            
+            with self._send_lock:
+                self.request.sendall(response.encode())
+            self.keep_alive = False
+
+class Server (WebsocketServer):
+    def __init__(self, host='127.0.0.1', port=0, loglevel=logging.WARNING, key=None, cert=None):
+        #logging.setLevel(loglevel)
+        TCPServer.__init__(self, (host, port), NewWebSocketHandler)
+        self.host = host
+        self.port = self.socket.getsockname()[1]
+
+        self.key = key
+        self.cert = cert
+
+        self.clients = []
+        self.id_counter = 0
+        self.thread = None
+
+        self._deny_clients = False
+
+
 
 
 class Process:
@@ -99,9 +175,6 @@ class Process:
                     # self.process.expect(input_string)
             except Exception as _:
                 pass
-
-        # self.process.expect(pexpect.EOF)
-        # print("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", self.process.before)
 
         self.process.close()
 
@@ -289,7 +362,7 @@ class Project:
             file.close()
 
 
-def new_client(client, _):
+def new_client(client, x):
     '''
     Called for every client connecting (after handshake)
     '''
@@ -412,6 +485,31 @@ def message_received(client, _, message) -> None:
         server.send_message(client, json.dumps({"ok": True, "service": "stop", "uid": message["uid"]}))
 
 
+def handshake(self):
+        headers = self.read_http_headers()
+        if 'upgrade' in headers:
+            
+            try:
+                assert headers['upgrade'].lower() == 'websocket'
+            except AssertionError:
+                self.keep_alive = False
+                return
+
+            try:
+                key = headers['sec-websocket-key']
+            except KeyError:
+                logger.warning("Client tried to connect but was missing a key")
+                self.keep_alive = False
+                return
+
+            response = self.make_handshake_response(key)
+            with self._send_lock:
+                self.handshake_done = self.request.send(response.encode())
+            self.valid_client = True
+            self.server._new_client_(self)
+        else:
+            print("upgrade to ws")
+
 if __name__ == "__main__":
     argv = sys.argv[1:]
 
@@ -440,11 +538,12 @@ if __name__ == "__main__":
             print("               ... defaults to 127.0.0.1")
             exit(0)
 
-    server = WebsocketServer(host=HOST, port=PORT)
+    server = Server(host=HOST, port=PORT)
 
     server.set_fn_new_client(new_client)
     server.set_fn_client_left(client_left)
     server.set_fn_message_received(message_received)
+    server.handshake = (handshake)
 
     logging.basicConfig(level=logging.DEBUG)
 
