@@ -1,5 +1,5 @@
 from typing import List
-from compiler import ada, c, dotnet, ghc, go, java, mono, python, rust, nasm, nim
+from compiler import ada, c, dotnet, ghc, go, java, mono, python, perl, rust, nasm, nim
 from compiler.helper import Response2, Problem2, run_command, prefix
 
 
@@ -47,6 +47,9 @@ def run(cmd: str, working_directory: str, files: List[str]) -> Response2:
 
     elif cmd.startswith("nim "):
         rslt = nim.run(cmd, working_directory)
+
+    elif cmd.startswith("perl "):
+        rslt = perl.run(cmd, working_directory)
 
     elif cmd.startswith("python "):
         rslt = python.run(cmd, working_directory)
