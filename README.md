@@ -122,8 +122,8 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-window.CodeRunner.init("ws://127.0.0.1:8000/")
-//window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
+//window.CodeRunner.init("ws://127.0.0.1:8000/")
+window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
 
@@ -136,7 +136,7 @@ window.CodeRunner.init("ws://127.0.0.1:8000/")
 @LIA.julia:   @LIA.eval(`["main.jl"]`, `none`, `julia main.jl`)
 @LIA.mono:    @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.nasm:    @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
-@LIA.perl:    @LIA.eval(`["main.pl"]`, `none`, `perl main.pl`)
+@LIA.perl:    @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl main.pl`)
 @LIA.python:  @LIA.python3
 @LIA.python2: @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
 @LIA.python3: @LIA.eval(`["main.py"]`, `none`, `python3 main.py`)

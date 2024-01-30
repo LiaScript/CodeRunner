@@ -32,7 +32,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y golang-go
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y rustc
 
 ### JAVA
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y default-jdk
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y default-jdk
+RUN curl -O https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb \
+    && dpkg -i jdk-21_linux-x64_bin.deb \
+    && rm jdk-21_linux-x64_bin.deb
 
 ### Haskell
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghc
