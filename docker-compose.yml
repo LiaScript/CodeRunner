@@ -1,6 +1,7 @@
 version: '3'
 services:
   coderunner:
+    build: .
     image: liascript/coderunner:latest
     ports:
       - "8000:8000"
