@@ -1,5 +1,5 @@
 from typing import List
-from compiler import c, dotnet, ghc, go, java, mono, python, rust, nasm, nim
+from compiler import ada, c, dotnet, ghc, go, java, mono, python, rust, nasm, nim
 from compiler.helper import Response2, Problem2, run_command, prefix
 
 
@@ -29,6 +29,9 @@ def run(cmd: str, working_directory: str, files: List[str]) -> Response2:
 
     elif cmd.startswith("ghc "):
         rslt = ghc.run(cmd, working_directory)
+
+    elif cmd.startswith("gnatmake "):
+        rslt = ada.run(cmd, working_directory)
 
     elif cmd.startswith("go "):
         rslt = go.run(cmd, working_directory)

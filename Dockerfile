@@ -90,12 +90,18 @@ RUN DEBIAN_FRONTEND=noninteractive pip3 install \
 ### Perl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y perl
 
+### Ruby
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ruby-full
+
 ### Clojure
 RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh \
     && chmod +x linux-install.sh \
     && ./linux-install.sh \
     && rm linux-install.sh \
     && clojure -e "(println \"First run clojure to install libs...\")"
+
+### ADA
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnat-12
 
 #############################################################################################
 COPY . /coderunner
