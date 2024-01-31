@@ -87,6 +87,7 @@ RUN DEBIAN_FRONTEND=noninteractive pip3 install \
     matplotlib \
     numpy \
     opencv-python opencv-contrib-python \
+    pyarrow \
     pandas \
     scipy
 
