@@ -1,5 +1,5 @@
 from typing import List
-from compiler import ada, c, dotnet, ghc, go, java, mono, python, perl, rust, nasm, nim
+from compiler import ada, c, dotnet, elixir, ghc, go, java, mono, python, perl, rust, nasm, nim
 from compiler.helper import Response2, Problem2, run_command, prefix
 
 
@@ -41,6 +41,9 @@ def run(cmd: str, working_directory: str, files: List[str]) -> Response2:
 
     elif cmd.startswith("mcs "):
         rslt = mono.run(cmd, working_directory)
+
+    elif cmd.startswith("elixirc ") or cmd.startswith("mix ") or cmd.startswith("iex ") or cmd.startswith("elixir "):
+        rslt = elixir.run(cmd, working_directory)
 
     elif cmd.startswith("nasm "):
         rslt = nasm.run(cmd, working_directory)
