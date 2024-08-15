@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:22.04
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
@@ -89,7 +89,8 @@ RUN DEBIAN_FRONTEND=noninteractive pip3 install \
     opencv-python opencv-contrib-python \
     pyarrow \
     pandas \
-    scipy
+    scipy \
+    pyyaml
 
 ### Perl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y perl
@@ -106,6 +107,9 @@ RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/
 
 ### ADA
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnat-12
+
+### Elixir
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y erlang-dev elixir
 
 #############################################################################################
 COPY . /coderunner
