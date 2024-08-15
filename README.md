@@ -1140,7 +1140,7 @@ $ heroku create
   Creating app... done, ⬢ XXXXXX-XXXXXXX-XXXXXX
   https://XXXXXX-XXXXXXX-XXXXXX.herokuapp.com/ | https://git.heroku.com/XXXXXX-XXXXXXX-XXXXXX.git
 
-$ heroko container:push web
+$ heroku container:push web
   === Building web (.../CodeRunner/Dockerfile)
   Sending build context to Docker daemon  4.633MB
   Step 1/35 : FROM ubuntu:kinetic
