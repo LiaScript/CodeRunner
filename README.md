@@ -9,13 +9,14 @@ language: en
 
 narrator: US English Female
 
-onload
+@onload
 window.CodeRunner = {
     ws: undefined,
     handler: {},
     connected: false,
     error: "",
     url: "",
+    firstConnection: true,
 
     init(url, step = 0) {
         this.url = url
@@ -98,22 +99,29 @@ window.CodeRunner = {
             }, 2000)
 
           } else {
-            sender.lia("LIA: wait")
+            //sender.lia("LIA: wait")
             setTimeout(() => {
-              sender.lia(this.error)
+              sender.lia(" " + this.error)
+              sender.lia(" Maybe reloading fixes the problem ...")
               sender.lia("LIA: stop")
             }, 800)
           }
         } else {
-          
           setTimeout(function() {
             self.send(uid, message, sender, false)
           }, 2000)
           
           if (sender) {
+            
             sender.lia("LIA: terminal")
-            //sender.log("waking up CodeRunner")
-            sender.log("stream", "", ".")
+            if (this.firstConnection) {
+              this.firstConnection = false
+              setTimeout(() => { 
+                sender.log("stream", "", [" Waking up execution server ...\n", "This may take up to 30 seconds ...\n", "Please be patient ...\n"])
+              }, 100)
+            } else {
+              sender.log("stream", "", ".")
+            }
             sender.lia("LIA: terminal")
           }
         }
@@ -1179,6 +1187,7 @@ window.CodeRunner = {
     connected: false,
     error: "",
     url: "",
+    firstConnection: true,
 
     init(url, step = 0) {
         this.url = url
@@ -1261,21 +1270,29 @@ window.CodeRunner = {
             }, 2000)
 
           } else {
-            sender.lia("LIA: wait")
+            //sender.lia("LIA: wait")
             setTimeout(() => {
-              sender.lia(this.error)
+              sender.lia(" " + this.error)
+              sender.lia(" Maybe reloading fixes the problem ...")
               sender.lia("LIA: stop")
             }, 800)
           }
         } else {
-          
           setTimeout(function() {
             self.send(uid, message, sender, false)
           }, 2000)
           
           if (sender) {
+            
             sender.lia("LIA: terminal")
-            sender.log("stream", "", ".")
+            if (this.firstConnection) {
+              this.firstConnection = false
+              setTimeout(() => { 
+                sender.log("stream", "", [" Waking up execution server ...\n", "This may take up to 30 seconds ...\n", "Please be patient ...\n"])
+              }, 100)
+            } else {
+              sender.log("stream", "", ".")
+            }
             sender.lia("LIA: terminal")
           }
         }
@@ -1283,8 +1300,8 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-window.CodeRunner.init("ws://127.0.0.1:8000/")
-//((window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
+//window.CodeRunner.init("ws://127.0.0.1:8000/")
+window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
 
