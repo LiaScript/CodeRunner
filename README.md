@@ -307,6 +307,13 @@ CodeRunner.handle(uid, function (msg) {
                 }
             }
 
+            if (msg.videos) {
+                for(let i = 0; i < msg.videos.length; i++) {
+                    console.html("<hr/>", msg.videos[i].file)
+                    console.html("<video title='" + msg.videos[i].file + "' src='" + msg.videos[i].data + "'></video>")
+                }
+            }
+
             if (msg.files) {
                 let str = "<hr/>"
                 for(let i = 0; i < msg.files.length; i++) {
