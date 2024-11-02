@@ -90,7 +90,13 @@ RUN DEBIAN_FRONTEND=noninteractive pip3 install \
     pyarrow \
     pandas \
     scipy \
+    sympy \
     pyyaml
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libcairo2-dev libpango1.0-dev
+RUN DEBIAN_FRONTEND=noninteractive pip3 install \
+    pycairo \
+    manim
 
 ### Perl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y perl

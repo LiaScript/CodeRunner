@@ -178,7 +178,7 @@ class Process:
 
         self.process.close()
 
-        self.stop(None, self.list_images(), self.filter_files())
+        self.stop(None, self.list_images(), self.list_videos(), self.filter_files())
 
     def filter_files(self):
         '''
@@ -225,6 +225,28 @@ class Process:
                                 ";base64," + base64.b64encode(img_file.read()).decode("utf8")}]
 
         return images
+
+    def list_videos(self):
+        '''
+        Search the current directory for all video files and return them as base64.
+        '''
+
+        files = os.listdir(self.current_directory)
+        files = list(map(lambda filename: self.current_directory + "/" + filename, files))
+        files = sorted(filter(os.path.isfile, files), key=os.path.getmtime, reverse=True)
+
+        videos = []
+        for filename in files:
+            extension = pathlib.Path(filename).suffix.lower()[1:]
+
+            if extension in ["mp4", "avi", "mov", "mkv", "flv", "wmv", "webm"]:
+                with open(filename, "rb") as video_file:
+                    videos.append({
+                        "file": pathlib.Path(filename).name,
+                        "data": "data:video/" + extension + ";base64," + base64.b64encode(video_file.read()).decode("utf8")
+                    })
+
+        return videos
 
     def read_line(self) -> bool:
         '''
@@ -461,7 +483,7 @@ def message_received(client, _, message) -> None:
                  "uid": message["uid"],
                  "data": escape_ansi(data)}))
 
-        def stop(error_message: str | None = None, images=[], files=[]):
+        def stop(error_message: str | None = None, images=[], videos=[], files=[]):
             resp = {"ok": True, "service": "stop", "uid": message["uid"]}
 
             if error_message:
@@ -469,6 +491,9 @@ def message_received(client, _, message) -> None:
 
             if len(images) > 0:
                 resp["images"] = images
+
+            if len(videos) > 0:
+                resp["videos"] = videos
 
             if len(files) > 0:
                 resp["files"] = files
