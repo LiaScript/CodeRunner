@@ -120,6 +120,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnat-12
 ### Elixir
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y erlang-dev elixir
 
+### Latex
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y texlive-latex-extra
+
 #############################################################################################
 COPY . /coderunner
 WORKDIR "/coderunner"
