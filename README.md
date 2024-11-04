@@ -325,7 +325,7 @@ CodeRunner.handle(uid, function (msg) {
             if (msg.videos) {
                 for(let i = 0; i < msg.videos.length; i++) {
                     console.html("<hr/>", msg.videos[i].file)
-                    console.html("<video title='" + msg.videos[i].file + "' src='" + msg.videos[i].data + "'></video>")
+                    console.html("<video controls style='width:100%' title='" + msg.videos[i].file + "' src='" + msg.videos[i].data + "'></video>")
                 }
             }
 
