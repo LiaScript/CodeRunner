@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-RUN sed -i 's/main$/main contrib non-free/' /etc/apt/sources.list
 RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
@@ -204,7 +203,9 @@ ENV PATH="$SDKMAN_DIR/bin:$SDKMAN_DIR/candidates/kotlin/current/bin:$PATH"
 RUN kotlin -version
 
 ### PostScript
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghostscript
+RUN sed -i 's/main$/main contrib non-free non-free-firmware/' /etc/apt/sources.list && \
+    DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y ghostscript
 
 
 ### Lua
