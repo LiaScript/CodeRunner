@@ -49,18 +49,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y r-cran-mapdata
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y r-cran-reshape
 
 ### Julia
-RUN curl -fLO https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.3-linux-x86_64.tar.gz \
-    && tar -xvzf julia-1.9.3-linux-x86_64.tar.gz \
-    && rm julia-1.9.3-linux-x86_64.tar.gz \
-    && mv julia-1.9.3/ /opt/ \
-    && ln -s /opt/julia-1.9.3/bin/julia /usr/local/bin/julia
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y
 
 ### Zig
-RUN curl -fLO https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz \
-    && tar -xf zig-linux-x86_64-0.11.0.tar.xz \
-    && rm zig-linux-x86_64-0.11.0.tar.xz \
-    && mv zig-linux-x86_64-0.11.0/ /opt/ \
-    && ln -s /opt/zig-linux-x86_64-0.11.0/zig /usr/local/bin/zig
+RUN curl -fLO https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz \
+    && tar -xf zig-linux-x86_64-0.13.0.tar.xz \
+    && rm zig-linux-x86_64-0.13.0.tar.xz \
+    && mv zig-linux-x86_64-0.13.0/ /opt/ \
+    && ln -s /opt/zig-linux-x86_64-0.13.0/zig /usr/local/bin/zig
 
 ### Nim
 RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
@@ -121,6 +117,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y erlang-dev elixir
 
 ### Latex
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y texlive-latex-extra
+
+### COBOL
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnucobol
 
 #############################################################################################
 COPY . /coderunner
