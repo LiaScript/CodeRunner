@@ -1,5 +1,5 @@
 from typing import List
-from compiler import ada, c, dotnet, elixir, ghc, go, java, mono, python, perl, rust, nasm, nim
+from compiler import ada, c, cobol, dotnet, elixir, ghc, go, java, mono, python, perl, rust, nasm, nim
 from compiler.helper import Response2, Problem2, run_command, prefix
 
 
@@ -59,6 +59,9 @@ def run(cmd: str, working_directory: str, files: List[str]) -> Response2:
 
     elif cmd.startswith("rustc "):
         rslt = rust.run(cmd, working_directory)
+
+    elif cmd.startswith("cobc "):
+        rslt = cobol.run(cmd, working_directory)
 
     elif cmd.startswith("none"):
         rslt = {"ok": True, "message": "", "problems": []}

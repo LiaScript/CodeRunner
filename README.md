@@ -129,7 +129,7 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-window.CodeRunner.init("ws://127.0.0.1:8000/")
+window.CodeRunner.init("ws://127.0.0.1:8001/")
 //window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
@@ -139,6 +139,7 @@ window.CodeRunner.init("ws://127.0.0.1:8000/")
 @LIA.clojure:           @LIA.eval(`["main.clj"]`, `none`, `clojure -M main.clj`)
 @LIA.clojure_withShell: @LIA.eval(`["main.clj"]`, `none`, `clojure -M -i main.clj -r`)
 @LIA.cpp:               @LIA.eval(`["main.cpp"]`, `g++ main.cpp -o a.out`, `./a.out`)
+@LIA.cobol:             @LIA.eval(`["main.cob"]`, `cobc -x --free main.cob`, `./main`)
 @LIA.elixir:            @LIA.eval(`["main.exs"]`, `none`, `elixir main.exs`)
 @LIA.elixir_withShell:  @LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
 @LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
@@ -633,6 +634,23 @@ Additionally, you can also use the `@LIA.clojure_withShell` macro, which will st
 (hello-world)
 ```
 @LIA.clojure_withShell
+
+
+### COBOL : `@LIA.cobol`
+
+COBOL (Common Business-Oriented Language) is a high-level programming language designed for business data processing. It was developed in the late 1950s and early 1960s by a committee of computer professionals from private industry, universities, and government agencies. COBOL is known for its readability, self-documenting code, and English-like syntax, making it easy to understand and maintain. It is widely used in legacy systems, financial institutions, and government agencies for processing large volumes of data. The backend here uses the GnuCOBOL compiler to compile COBOL code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [COBOL programming language Wikipedia page](https://en.wikipedia.org/wiki/COBOL).
+
+
+```cobol
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. HELLO-WORLD.
+       PROCEDURE DIVISION.
+           DISPLAY 'Hello, world'.
+           STOP RUN.
+```
+@LIA.cobol
 
 
 ### Elixir : `@LIA.elixir`

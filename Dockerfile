@@ -3,12 +3,11 @@ FROM ubuntu:22.04
 RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y curl
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    apt-utils \
+    curl \
+    git \
+    firejail
 
 ##################################################################################
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y make
@@ -33,9 +32,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y rustc
 
 ### JAVA
 #RUN DEBIAN_FRONTEND=noninteractive apt-get install -y default-jdk
-RUN curl -O https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb \
-    && dpkg -i jdk-21_linux-x64_bin.deb \
-    && rm jdk-21_linux-x64_bin.deb
+RUN curl -O https://download.oracle.com/java/23/latest/jdk-23_linux-x64_bin.deb \
+    && dpkg -i jdk-23_linux-x64_bin.deb \
+    && rm jdk-23_linux-x64_bin.deb
 
 ### Haskell
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghc
@@ -50,18 +49,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y r-cran-mapdata
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y r-cran-reshape
 
 ### Julia
-RUN curl -O https://julialang-s3.julialang.org/bin/linux/x64/1.9/julia-1.9.3-linux-x86_64.tar.gz \
-    && tar -xvzf julia-1.9.3-linux-x86_64.tar.gz \
-    && rm julia-1.9.3-linux-x86_64.tar.gz \
-    && mv julia-1.9.3/ /opt/ \
-    && ln -s /opt/julia-1.9.3/bin/julia /usr/local/bin/julia
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y
 
 ### Zig
-RUN curl -O https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz \
-    && tar -xf zig-linux-x86_64-0.11.0.tar.xz \
-    && rm zig-linux-x86_64-0.11.0.tar.xz \
-    && mv zig-linux-x86_64-0.11.0/ /opt/ \
-    && ln -s /opt/zig-linux-x86_64-0.11.0/zig /usr/local/bin/zig
+RUN curl -fLO https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz \
+    && tar -xf zig-linux-x86_64-0.13.0.tar.xz \
+    && rm zig-linux-x86_64-0.13.0.tar.xz \
+    && mv zig-linux-x86_64-0.13.0/ /opt/ \
+    && ln -s /opt/zig-linux-x86_64-0.13.0/zig /usr/local/bin/zig
 
 ### Nim
 RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
@@ -93,7 +88,10 @@ RUN DEBIAN_FRONTEND=noninteractive pip3 install \
     sympy \
     pyyaml
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libcairo2-dev libpango1.0-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    ffmpeg \
+    libcairo2-dev \
+    libpango1.0-dev
 RUN DEBIAN_FRONTEND=noninteractive pip3 install \
     pycairo \
     manim
@@ -116,6 +114,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnat-12
 
 ### Elixir
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y erlang-dev elixir
+
+### Latex
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y texlive-latex-extra
+
+### COBOL
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnucobol
 
 #############################################################################################
 COPY . /coderunner
