@@ -4,6 +4,6 @@ services:
     build: .
     image: liascript/coderunner:latest
     ports:
-      - "8000:8000"
+      - '8001:8000'
     environment:
       - CODERUNNER_HOST=0.0.0.0

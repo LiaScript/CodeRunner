@@ -121,6 +121,53 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y texlive-latex-extra
 ### COBOL
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnucobol
 
+### Fortran
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gfortran
+
+### Algol
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y algol68g
+
+### APL
+RUN curl -O https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=19.0/linux_64_19.0.50027_unicode.x86_64.deb \
+    && dpkg -i linux_64_19.0.50027_unicode.x86_64.deb \
+    && rm linux_64_19.0.50027_unicode.x86_64.deb
+
+### Prolog
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y swi-prolog
+
+### Forth
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gforth
+
+### Pascal
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y fpc
+
+
+### OCaml
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ocaml
+
+### Scheme
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y guile-3.0
+
+### Smalltalk
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnu-smalltalk
+
+### Prolog
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y swi-prolog
+
+### Groovy
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y groovy
+
+### Scala
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y scala
+
+### Racket
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y racket
+
+### Tcl
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tcl
+
+
+
 #############################################################################################
 COPY . /coderunner
 WORKDIR "/coderunner"

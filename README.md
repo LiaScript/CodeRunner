@@ -135,13 +135,20 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 
 
 @LIA.ada:               @LIA.eval(`["main.ada"]`, `gnatmake main.ada`, `./main`)
+@LIA.algol:             @LIA.eval(`["main.alg"]`, `none`, `a68g main.alg`)
+@LIA.apl:               @LIA.eval(`["main.apl"]`, `none`, `dyalog -script main.apl`)
 @LIA.c:                 @LIA.eval(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
 @LIA.clojure:           @LIA.eval(`["main.clj"]`, `none`, `clojure -M main.clj`)
 @LIA.clojure_withShell: @LIA.eval(`["main.clj"]`, `none`, `clojure -M -i main.clj -r`)
 @LIA.cpp:               @LIA.eval(`["main.cpp"]`, `g++ main.cpp -o a.out`, `./a.out`)
+@LIA.cobol:             @LIA.eval(`["main.cob"]`, `cobc -x --free main.cob`, `./main`)
 @LIA.elixir:            @LIA.eval(`["main.exs"]`, `none`, `elixir main.exs`)
 @LIA.elixir_withShell:  @LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
+@LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
+@LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
+@LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
 @LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
+@LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 @LIA.haskell_withShell: @LIA.eval(`["main.hs"]`, `none`, `ghci main.hs`)
 @LIA.java:              @LIA.eval(`["@0.java"]`, `javac @0.java`, `java @0`)
@@ -150,8 +157,11 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.mono:              @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.nasm:              @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
 @LIA.nim:               @LIA.eval(`["main.nim"]`, `nim c main.nim`, `./main`)
+@LIA.ocaml:             @LIA.eval(`["main.ml"]`, `none`, `ocaml main.ml`)
 @LIA.perl:              @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl main.pl`)
 @LIA.perl_withShell:    @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl -d main.pl`)
+@LIA.prolog:            @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl -g @0 -t halt`)
+@LIA.prolog_withShell:  @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl`)
 @LIA.python:            @LIA.python3
 @LIA.python_withShell:  @LIA.python3_withShell
 @LIA.python2:           @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
@@ -160,9 +170,14 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.python3_withShell: @LIA.eval(`["main.py"]`, `none`, `python3 -i main.py`)
 @LIA.r:                 @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.r_withShell:       @LIA.eval(`["main.R"]`, `none`, `sh -c "cat main.R - | R --interactive"`)
+@LIA.racket:            @LIA.eval(`["main.rkt"]`, `none`, `racket main.rkt`)
 @LIA.ruby:              @LIA.eval(`["main.rb"]`, `none`, `ruby main.rb`)
 @LIA.ruby_withShell:    @LIA.eval(`["main.rb"]`, `none`, `irb --nomultiline -r ./main.rb`)
 @LIA.rust:              @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
+@LIA.scala:             @LIA.eval(`["@0.scala"]`, `scalac @0.scala`, `scala @0`)
+@LIA.scheme:            @LIA.eval(`["main.scm"]`, `none`, `guile --no-auto-compile main.scm`)
+@LIA.smalltalk:         @LIA.eval(`["main.st"]`, `none`, `gst main.st`)
+@LIA.tcl:               @LIA.eval(`["main.tcl"]`, `none`, `tclsh main.tcl`)
 @LIA.v:                 @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.v_withShell:       @LIA.eval(`["main.v"]`, `none`, `sh -c "cat main.v - | v repl"`)
 @LIA.zig:               @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
@@ -436,6 +451,36 @@ end Main;
 ```
 @LIA.ada
 
+### ALGOL : `@LIA.algol`
+
+ALGOL (Algorithmic Language) is a family of imperative, procedural, and structured programming languages that were developed in the late 1950s and early 1960s. ALGOL was designed to be a universal language for expressing algorithms and was influential in the development of modern programming languages. ALGOL 60, the most well-known version, introduced many concepts that are still used today, such as block structures, recursion, and parameter passing mechanisms. The backend here uses the ALGOL 60 compiler to compile and execute ALGOL code, ensuring compatibility with the original language specification.
+
+For more information, you can visit the [ALGOL programming language Wikipedia page](https://en.wikipedia.org/wiki/ALGOL).
+
+---
+
+```algol
+BEGIN
+    print(("Hello, World!", new line))
+END
+```
+@LIA.algol
+
+
+### APL : `@LIA.apl`
+
+APL (A Programming Language) is a high-level, array-oriented programming language that was developed in the 1960s by Kenneth E. Iverson. APL is known for its concise and expressive syntax, which uses a wide range of special symbols to represent mathematical functions and operations. It is particularly well-suited for numerical and array processing tasks, making it popular in scientific computing, data analysis, and financial modeling. The backend here uses the Dyalog APL interpreter, which provides a powerful environment for developing and executing APL code.
+
+For more information, you can visit the [APL programming language Wikipedia page](https://en.wikipedia.org/wiki/APL_%28programming_language%29).
+
+---
+
+```apl
+⎕←'abcd' ∘.= 'cabbage'
+```
+@LIA.apl
+
+
 ### Assembly (nasm) : `@LIA.nasm`
 
 Assembly language is a low-level programming language that provides direct control over hardware through symbolic representation of machine code instructions. Each instruction in an assembly language corresponds closely to a machine code instruction supported by the architecture's CPU. Assembly language is often used in system programming, particularly for writing operating systems, device drivers, and embedded systems, where precise control of the hardware is essential. In the backend, the NASM (Netwide Assembler) compiler is used, which is a popular assembler for x86 architecture, known for its portability and flexibility.
@@ -635,6 +680,23 @@ Additionally, you can also use the `@LIA.clojure_withShell` macro, which will st
 @LIA.clojure_withShell
 
 
+### COBOL : `@LIA.cobol`
+
+COBOL (Common Business-Oriented Language) is a high-level programming language designed for business data processing. It was developed in the late 1950s and early 1960s by a committee of computer professionals from private industry, universities, and government agencies. COBOL is known for its readability, self-documenting code, and English-like syntax, making it easy to understand and maintain. It is widely used in legacy systems, financial institutions, and government agencies for processing large volumes of data. The backend here uses the GnuCOBOL compiler to compile COBOL code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [COBOL programming language Wikipedia page](https://en.wikipedia.org/wiki/COBOL).
+
+
+```cobol
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. HELLO-WORLD.
+       PROCEDURE DIVISION.
+           DISPLAY 'Hello, world'.
+           STOP RUN.
+```
+@LIA.cobol
+
+
 ### Elixir : `@LIA.elixir`
 
 Elixir is a dynamic, functional programming language designed for building scalable and maintainable applications. It was created by José Valim and first released in 2011. Elixir runs on the Erlang Virtual Machine (BEAM), which provides excellent support for concurrency, fault tolerance, and distributed systems. Elixir leverages the strengths of Erlang while offering a more modern syntax and powerful metaprogramming capabilities. It is widely used for web development, embedded systems, and applications requiring high reliability. The backend here uses the Elixir compiler to execute Elixir code, ensuring robust and efficient performance on the BEAM platform.
@@ -656,6 +718,7 @@ Additionally, you can also use the `@LIA.elixir_withShell` macro, which will sta
 IO.puts "Hello World"
 ```
 @LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
+
 
 ### F# : `@LIA.fsharp`
 
@@ -698,6 +761,50 @@ printfn "Hello from F#"
 </Project>
 ```
 @LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
+
+
+### Forth : `@LIA.forth`
+
+Forth is a stack-based, extensible, and interactive programming language that was developed in the late 1960s by Charles H. Moore. It is known for its simplicity, flexibility, and efficiency, making it ideal for embedded systems, real-time applications, and low-level programming tasks. Forth uses a postfix notation, where operations are performed by pushing and popping values on a data stack. It provides direct access to memory and hardware, allowing for fine-grained control over system resources. The backend here uses the Gforth interpreter to execute Forth code, ensuring fast and reliable execution.
+
+For more information, you can visit the [Forth programming language Wikipedia page](https://en.wikipedia.org/wiki/Forth_%28programming_language%29).
+
+---
+
+```forth
+: hello ." Hello, world!" cr ;
+hello
+```
+@LIA.forth
+
+### Fortran : `@LIA.fortran`
+
+Fortran (Formula Translation) is a high-level programming language developed by IBM in the 1950s for scientific and engineering applications. It is known for its efficiency, numerical accuracy, and extensive library of mathematical functions, making it ideal for numerical computations, simulations, and data analysis. Fortran has evolved over the years, with the latest standard being Fortran 2018, which includes modern features like coarrays, improved parallelism, and interoperability with C. The backend here uses the GNU Fortran compiler (gfortran) to compile Fortran code, ensuring high performance and compatibility with modern Fortran standards.
+
+For more information, you can visit the [Fortran programming language Wikipedia page](https://en.wikipedia.org/wiki/Fortran).
+
+---
+
+```fortran
+program hello
+  print *, "Hello, world!"
+end program hello
+```
+@LIA.fortran
+
+### Groovy : `@LIA.groovy`
+
+Groovy is a dynamic, object-oriented programming language that runs on the Java Virtual Machine (JVM). It was created by James Strachan and first released in 2003. Groovy is known for its simplicity, flexibility, and seamless integration with Java, allowing developers to write concise and expressive code. It supports features like closures, dynamic typing, and metaprogramming, making it ideal for scripting, web development, and automation tasks. The backend here uses the Groovy compiler to execute Groovy code, ensuring compatibility with the JVM and access to the Java ecosystem.
+
+For more information, you can visit the [Groovy programming language Wikipedia page](https://en.wikipedia.org/wiki/Apache_Groovy).
+
+---
+
+```groovy
+println "Hello, world!"
+```
+@LIA.groovy
+
 
 ### GO : `@LIA.go`
 
@@ -884,6 +991,7 @@ println("result 2: ", quad2)
 ```
 @LIA.julia_withShell
 
+
 ### Nim : `@LIA.nim`
 
 Nim is a statically typed, compiled programming language that combines the performance of C with the expressiveness of modern languages like Python. First released in 2008, Nim is known for its simplicity, efficiency, and flexibility, making it suitable for systems programming, web development, and scientific computing. Nim features a powerful metaprogramming system, automatic memory management, and a syntax that is easy to read and write. It compiles to C, C++, and JavaScript, enabling cross-platform development with high performance. The backend here uses the Nim compiler to execute Nim code, ensuring efficient and optimized output.
@@ -896,6 +1004,36 @@ For more information, you can visit the [Nim programming language Wikipedia page
 echo "Hello World"
 ```
 @LIA.nim
+
+
+### OCaml : `@LIA.ocaml`
+
+OCaml is a statically typed, functional programming language that was developed in the late 1990s as an extension of the Caml language. It is known for its strong type system, type inference, and support for functional, imperative, and object-oriented programming paradigms. OCaml is widely used in academia and industry for developing compilers, interpreters, theorem provers, and other applications that require high reliability and performance. The backend here uses the OCaml compiler to execute OCaml code, ensuring efficient and optimized execution.
+
+For more information, you can visit the [OCaml programming language Wikipedia page](https://en.wikipedia.org/wiki/OCaml).
+
+---
+
+```ocaml
+print_string "Hello, world!\n";;
+```
+@LIA.ocaml
+
+### Pascal : `@LIA.pascal`
+
+Pascal is a high-level, procedural programming language developed by Niklaus Wirth in the late 1960s. It was designed to encourage good programming practices and provide a structured approach to software development. Pascal is known for its readability, simplicity, and strong typing, making it ideal for teaching programming concepts and developing reliable software. It introduced many features that are now common in modern programming languages, such as block structures, data structures, and modular programming. The backend here uses the Free Pascal compiler to compile Pascal code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Pascal programming language Wikipedia page](https://en.wikipedia.org/wiki/Pascal_%28programming_language%29).
+
+---
+
+```pascal
+program HelloWorld;
+begin
+  writeln('Hello, world!');
+end.
+```
+@LIA.eval(`["main.pas"]`, `fpc main.pas`, `./main`)
 
 ### Perl : `@LIA.perl`
 
@@ -925,6 +1063,46 @@ sub greet {
 my $x = 42;
 ```
 @LIA.perl_withShell
+
+### Prolog : `@LIA.prolog`
+
+Prolog is a logic programming language that was developed in the early 1970s by Alain Colmerauer and Robert Kowalski. It is based on formal logic and provides a declarative approach to problem-solving, where programs are defined as sets of logical rules and facts. Prolog is particularly well-suited for tasks involving symbolic reasoning, artificial intelligence, and natural language processing. It is known for its pattern matching and backtracking capabilities, which allow for efficient search and inference. The backend here uses the SWI-Prolog interpreter to execute Prolog code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Prolog programming language Wikipedia page](https://en.wikipedia.org/wiki/Prolog).
+
+---
+
+```prolog
+likes(mary, chocolate).
+likes(mary, wine).
+likes(john, wine).
+likes(john, mary).
+
+% Define the query rule to find pairs X and Y where john likes X and X likes Y
+query :-
+    likes(john, X),
+    likes(X, Y),
+    format('X = ~w, Y = ~w~n', [X, Y]).
+```
+@LIA.prolog(query)
+
+---
+
+Additionally, you can also use the `@LIA.prolog_withShell` macro, which will start a Prolog shell after the code has been executed.
+
+```prolog
+likes(mary, chocolate).
+likes(mary, wine).
+likes(john, wine).
+likes(john, mary).
+
+% Define the query rule to find pairs X and Y where john likes X and X likes Y
+query :-
+    likes(john, X),
+    likes(X, Y),
+    format('X = ~w, Y = ~w~n', [X, Y]).
+```
+@LIA.prolog_withShell
 
 ### Python2 : `@LIA.python2`
 
@@ -1030,6 +1208,20 @@ print("Hello World")
 ```
 @LIA.r_withShell
 
+### Racket : `@LIA.racket`
+
+Racket is a general-purpose, multi-paradigm programming language that was developed as a descendant of the Scheme programming language. It is known for its extensibility, expressive syntax, and powerful macro system, making it ideal for language-oriented programming, domain-specific languages, and software development. Racket provides a rich set of libraries and tools for building web applications, graphical user interfaces, and educational software. It is widely used in academia and industry for research, teaching, and prototyping. The backend here uses the Racket interpreter to execute Racket code, ensuring efficient and reliable performance.
+
+For more information, you can visit the [Racket programming language Wikipedia page](https://en.wikipedia.org/wiki/Racket_%28programming_language%29).
+
+---
+
+```racket
+#lang racket
+(displayln "Hello, world!")
+```
+@LIA.racket
+
 ### Ruby : `@LIA.ruby`
 
 Ruby is a high-level, interpreted programming language known for its simplicity and productivity. Developed by Yukihiro Matsumoto and first released in 1995, Ruby emphasizes ease of use and developer happiness, featuring a clean and elegant syntax that is easy to read and write. It supports multiple programming paradigms, including object-oriented, functional, and imperative programming. Ruby is particularly renowned for its use in web development, especially with the Ruby on Rails framework, which facilitates rapid development and deployment of web applications. The backend here uses the Ruby interpreter to execute Ruby code, ensuring efficient execution and support for modern Ruby features.
@@ -1086,6 +1278,63 @@ fn main() {
 }
 ```
 @LIA.rust
+
+### Scala : `@LIA.scala`
+
+Scala is a modern, functional programming language that runs on the Java Virtual Machine (JVM). It was developed by Martin Odersky and first released in 2003. Scala combines object-oriented and functional programming paradigms, providing a powerful and expressive language for building scalable and robust applications. Scala is known for its conciseness, type safety, and interoperability with Java, making it a popular choice for developing web services, distributed systems, and data processing applications. The backend here uses the Scala compiler to execute Scala code, ensuring efficient performance on the JVM.
+
+For more information, you can visit the [Scala programming language Wikipedia page](https://en.wikipedia.org/wiki/Scala_%28programming_language%29).
+
+---
+
+```scala
+object HelloWorld {
+  def main(args: Array[String]): Unit = {
+    println("Hello, world!")
+  }
+}
+```
+@LIA.scala(HelloWorld)
+
+### Scheme : `@LIA.scheme`
+
+Scheme is a minimalist, functional programming language that was developed in the 1970s as a dialect of Lisp. It is known for its simplicity, elegance, and expressive power, making it an ideal language for teaching programming concepts and exploring functional programming paradigms. Scheme features a simple syntax based on s-expressions and a powerful macro system that allows for easy metaprogramming. It is widely used in academic settings and research for its clarity and ease of understanding. The backend here uses the Scheme interpreter to execute Scheme code, ensuring efficient and reliable performance.
+
+For more information, you can visit the [Scheme programming language Wikipedia page](https://en.wikipedia.org/wiki/Scheme_%28programming_language%29).
+
+---
+
+```scheme
+(display "Hello, world!")
+(newline)
+```
+@LIA.scheme
+
+### Smalltalk : `@LIA.smalltalk`
+
+Smalltalk is an object-oriented, dynamically typed programming language that was developed in the 1970s at Xerox PARC. It is known for its simplicity, elegance, and powerful object model, making it an ideal language for teaching object-oriented programming concepts. Smalltalk features a live programming environment where developers can interact with objects directly, making it easy to explore and modify code in real time. Smalltalk has influenced many modern programming languages, including Java, Ruby, and Python. The backend here uses the Squeak Smalltalk interpreter to execute Smalltalk code, ensuring interactive and dynamic programming capabilities.
+
+For more information, you can visit the [Smalltalk programming language Wikipedia page](https://en.wikipedia.org/wiki/Smalltalk).
+
+---
+
+```smalltalk
+'Hello, world!' displayNl
+```
+@LIA.smalltalk
+
+### TCL : `@LIA.tcl`
+
+Tcl (Tool Command Language) is a high-level, interpreted programming language known for its simplicity, flexibility, and extensibility. Developed by John Ousterhout in the late 1980s, Tcl is designed to be easy to learn and use, with a minimalistic syntax that emphasizes commands and procedures. Tcl is widely used for scripting, automation, and rapid prototyping, as well as for embedding in applications and extending with custom functionality. The backend here uses the Tcl interpreter to execute Tcl code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Tcl programming language Wikipedia page](https://en.wikipedia.org/wiki/Tcl).
+
+---
+
+```tcl
+puts "Hello, world!"
+```
+@LIA.tcl
 
 ### V : `@LIA.v`
 
