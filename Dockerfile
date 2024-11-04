@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 
+RUN sed -i 's/main$/main contrib non-free/' /etc/apt/sources.list
 RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
@@ -166,7 +167,63 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y racket
 ### Tcl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tcl
 
+### IO
+# Install dependencies
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libffi-dev \
+    cmake \
+    libpcre3-dev \
+    libxml2-dev \
+    libssl-dev \
+    zlib1g-dev \
+    git && \
+    rm -rf /var/lib/apt/lists/*
 
+# Clone the Io language repository with submodules
+RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
+    cd io && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install && \
+    cd ../.. && \
+    rm -rf io
+
+### Kotlin
+# Install SDKMAN
+RUN curl -s "https://get.sdkman.io" | bash
+
+# Install Kotlin and set up environment
+RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install kotlin && sdk install java"
+
+# Set environment variables for SDKMAN in Docker
+ENV SDKMAN_DIR="/root/.sdkman"
+ENV PATH="$SDKMAN_DIR/bin:$SDKMAN_DIR/candidates/kotlin/current/bin:$PATH"
+
+# Verify installation
+RUN kotlin -version
+
+### PostScript
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghostscript
+
+
+### Lua
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y lua5.4
+
+### D
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gdc
+
+### Verilog
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y iverilog
+
+### VHDL
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghdl
+
+### Octave
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y octave
+
+### COQ
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y coq
 
 #############################################################################################
 COPY . /coderunner

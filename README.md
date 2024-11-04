@@ -129,8 +129,8 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-//window.CodeRunner.init("ws://127.0.0.1:8000/")
-window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
+window.CodeRunner.init("ws://127.0.0.1:4000/")
+//window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
 
@@ -142,6 +142,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.clojure_withShell: @LIA.eval(`["main.clj"]`, `none`, `clojure -M -i main.clj -r`)
 @LIA.cpp:               @LIA.eval(`["main.cpp"]`, `g++ main.cpp -o a.out`, `./a.out`)
 @LIA.cobol:             @LIA.eval(`["main.cob"]`, `cobc -x --free main.cob`, `./main`)
+@LIA.coq:               @LIA.eval(`["file.v"]`, `coqc file.v`, `coqtop -lv file.v`)
+@LIA.d:                 @LIA.eval(`["main.d"]`, `gdc main.d`, `./a.out`)
 @LIA.elixir:            @LIA.eval(`["main.exs"]`, `none`, `elixir main.exs`)
 @LIA.elixir_withShell:  @LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
 @LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
@@ -151,15 +153,20 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 @LIA.haskell_withShell: @LIA.eval(`["main.hs"]`, `none`, `ghci main.hs`)
+@LIA.io:                @LIA.eval(`["main.io"]`, `none`, `io main.io`)
+@LIA.io_withShell:      @LIA.eval(`["main.io"]`, `none`, `io -i main.io`)
 @LIA.java:              @LIA.eval(`["@0.java"]`, `javac @0.java`, `java @0`)
 @LIA.julia:             @LIA.eval(`["main.jl"]`, `none`, `julia main.jl`)
 @LIA.julia_withShell:   @LIA.eval(`["main.jl"]`, `none`, `julia -i main.jl`)
+@LIA.kotlin:            @LIA.eval(`["main.kt"]`, `kotlinc main.kt -include-runtime -d main.jar`, `java -jar main.jar`)
+@LIA.lua:               @LIA.eval(`["main.lua"]`, `none`, `lua main.lua`)
 @LIA.mono:              @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.nasm:              @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
 @LIA.nim:               @LIA.eval(`["main.nim"]`, `nim c main.nim`, `./main`)
 @LIA.ocaml:             @LIA.eval(`["main.ml"]`, `none`, `ocaml main.ml`)
 @LIA.perl:              @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl main.pl`)
 @LIA.perl_withShell:    @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl -d main.pl`)
+@LIA.postscript:        @LIA.eval(`["input.ps"]`, `none`, `gs -sDEVICE=png16m -r300 -o output.png input.ps`)
 @LIA.prolog:            @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl -g @0 -t halt`)
 @LIA.prolog_withShell:  @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl`)
 @LIA.python:            @LIA.python3
@@ -180,6 +187,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.tcl:               @LIA.eval(`["main.tcl"]`, `none`, `tclsh main.tcl`)
 @LIA.v:                 @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.v_withShell:       @LIA.eval(`["main.v"]`, `none`, `sh -c "cat main.v - | v repl"`)
+@LIA.verilog:           @LIA.eval(`["main.v"]`, `iverilog -o main.vvp main.v`, `vvp main.vvp`)
+@LIA.vhdl:              @LIA.eval(`["@0.vhdl"]`, `ghdl -a @0.vhdl && ghdl -e @0`, `ghdl -r @0`)
 @LIA.zig:               @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
 @LIA.dotnet
@@ -209,6 +218,18 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 </Project>
 ```
 @LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
+@end
+
+@LIA.qsharp
+```xml    -project.csproj
+<Project Sdk="Microsoft.Quantum.Sdk/0.28.302812">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+</Project>
+```
+@LIA.eval(`["Program.qs", "project.csproj"]`, `dotnet build -nologo`, `dotnet run`)
 @end
 
 @LIA.eval:  @LIA.eval_(false,`@0`,@1,@2,@3)
@@ -512,7 +533,7 @@ _start:   mov       rax, 1                  ; system call for write
           section   .data
 message:  db        "Hello, World", 10      ; note the newline at the end
 ```
-@LIA.eval(`["main.asm"]`, `nasm  -felf64 main.asm && ld main.o`, `./a.out`)
+@LIA.nasm
 
 ### C : `@LIA.c`
 
@@ -696,6 +717,42 @@ For more information, you can visit the [COBOL programming language Wikipedia pa
 ```
 @LIA.cobol
 
+### Coq : `@LIA.coq`
+
+Coq is an interactive theorem prover and functional programming language developed by the French Institute for Research in Computer Science and Automation (INRIA). It is designed for formal verification of mathematical proofs and software programs, allowing developers to write and verify complex mathematical statements and algorithms. Coq is based on the Calculus of Inductive Constructions (CIC), a powerful type theory that supports dependent types, higher-order logic, and formal reasoning. The backend here uses the Coq compiler to execute Coq code, ensuring correctness and reliability of the proofs and programs.
+
+For more information, you can visit the [Coq programming language Wikipedia page](https://en.wikipedia.org/wiki/Coq).
+
+---
+
+```coq
+Require Import ZArith.
+Open Scope Z_scope.
+Goal forall a b c:Z,
+    (a + b + c) ^ 2 =
+     a * a + b ^ 2 + c * c + 2 * a * b + 2 * a * c + 2 * b * c.
+  intros; ring.
+Qed.
+```
+@LIA.coq
+
+### D : `@LIA.d`
+
+D is a systems programming language with C-like syntax and static typing. It combines the power and performance of C and C++ with the safety and expressiveness of modern programming languages like Rust and Swift. D is designed for writing efficient, maintainable, and scalable software, making it ideal for system programming, game development, and high-performance applications. The backend here uses the DMD (Digital Mars D) compiler to compile D code, ensuring fast and reliable execution.
+
+For more information, you can visit the [D programming language Wikipedia page](https://en.wikipedia.org/wiki/D_%28programming_language%29).
+
+---
+
+```d
+import std.stdio;
+
+void main()
+{
+    writeln("Hello, World!");
+}
+```
+@LIA.d
 
 ### Elixir : `@LIA.elixir`
 
@@ -847,6 +904,27 @@ main = putStrLn "hello world"
 ```
 @LIA.haskell_withShell
 
+
+### IO : `@LIA.io`
+
+Io is a prototype-based, object-oriented programming language that was developed by Steve Dekorte in the early 2000s. It is known for its simplicity, minimalism, and powerful message-passing model, making it ideal for building dynamic and interactive applications. Io is inspired by Smalltalk, Self, and Lisp, and it provides a flexible and extensible environment for creating domain-specific languages and frameworks. The backend here uses the Io interpreter to execute Io code, ensuring fast and efficient execution.
+
+For more information, you can visit the [Io programming language Wikipedia page](https://en.wikipedia.org/wiki/Io_%28programming_language%29).
+
+---
+
+``` io
+"Hello, world!" println
+```
+@LIA.io
+
+As an alternative, you can also run it within an interactive REPL shell.
+
+``` io
+"Hello, world!" println
+```
+@LIA.io_withShell
+
 ### Java : `@LIA.java`
 
 Java is a widely-used, class-based, object-oriented programming language that was developed by Sun Microsystems (now owned by Oracle) and released in 1995. It is designed to be platform-independent, meaning that compiled Java code can run on any platform that supports the Java Virtual Machine (JVM). Java is known for its portability, scalability, and strong memory management features, making it ideal for building large-scale enterprise applications, Android apps, and web services. The language's syntax is similar to C++, but it simplifies many complex features, making it easier to learn and use. The backend here uses `jdk-21_linux-x64_bin`, the latest version of the Java Development Kit (JDK), to compile and execute Java code, ensuring cutting-edge performance and compatibility with modern Java features.
@@ -991,6 +1069,33 @@ println("result 2: ", quad2)
 ```
 @LIA.julia_withShell
 
+### Kotlin : `@LIA.kotlin`
+
+Kotlin is a modern, statically typed programming language developed by JetBrains in 2011. It is designed to be fully interoperable with Java and runs on the Java Virtual Machine (JVM). Kotlin combines object-oriented and functional programming features, making it a versatile language for building Android apps, web services, and enterprise applications. It is known for its conciseness, safety features, and expressive syntax, which reduce boilerplate code and improve developer productivity. The backend here uses the Kotlin compiler to compile Kotlin code, ensuring compatibility with the JVM and access to the Java ecosystem.
+
+For more information, you can visit the [Kotlin programming language Wikipedia page](https://en.wikipedia.org/wiki/Kotlin_%28programming_language%29).
+
+---
+
+```kotlin
+fun main() {
+    println("Hello, World!")
+}
+```
+@LIA.kotlin
+
+### Lua : `@LIA.lua`
+
+Lua is a lightweight, high-level programming language designed for embedded systems, scripting, and game development. It was developed in the early 1990s by Roberto Ierusalimschy, Luiz Henrique de Figueiredo, and Waldemar Celes at the Pontifical Catholic University of Rio de Janeiro. Lua is known for its simplicity, efficiency, and extensibility, making it ideal for integrating with other languages and platforms. It provides a powerful set of features, including first-class functions, coroutines, and metatables, which enable developers to build flexible and scalable applications. The backend here uses the Lua interpreter to execute Lua code, ensuring fast and reliable execution.
+
+For more information, you can visit the [Lua programming language Wikipedia page](https://en.wikipedia.org/wiki/Lua_%28programming_language%29).
+
+---
+
+```lua
+print("Hello, world!")
+```
+@LIA.lua
 
 ### Nim : `@LIA.nim`
 
@@ -1018,6 +1123,19 @@ For more information, you can visit the [OCaml programming language Wikipedia pa
 print_string "Hello, world!\n";;
 ```
 @LIA.ocaml
+
+### Octave : `@LIA.octave`
+
+Octave is a high-level, interpreted programming language primarily used for numerical computations and data analysis. It is compatible with MATLAB and provides a similar syntax and functionality, making it a popular choice for scientific computing, machine learning, and signal processing. Octave supports matrix operations, plotting, and algorithm development, allowing users to prototype and test complex mathematical models efficiently. The backend here uses the Octave interpreter to execute Octave code, ensuring compatibility with MATLAB scripts and toolboxes.
+
+For more information, you can visit the [Octave programming language Wikipedia page](https://en.wikipedia.org/wiki/GNU_Octave).
+
+---
+
+```octave
+disp("Hello, world!")
+```
+@LIA.eval(`["main.m"]`, `none`, `octave --no-window-system main.m`)
 
 ### Pascal : `@LIA.pascal`
 
@@ -1063,6 +1181,28 @@ sub greet {
 my $x = 42;
 ```
 @LIA.perl_withShell
+
+### PostScript : `@LIA.postscript`
+
+PostScript is a page description language developed by Adobe Systems in the early 1980s. It is used primarily in the printing and graphics industries to describe the layout and appearance of documents, images, and other visual content. PostScript is known for its flexibility, scalability, and device independence, making it ideal for generating high-quality output on a wide range of printers and displays. It uses a stack-based programming model, where operations are performed by pushing and popping values on a data stack. The backend here uses the Ghostscript interpreter to execute PostScript code, ensuring compatibility and efficient rendering.
+
+For more information, you can visit the [PostScript programming language Wikipedia page](https://en.wikipedia.org/wiki/PostScript).
+
+---
+
+```postscript
+%!PS
+<< /PageSize [420 100] >> setpagedevice  % Set page size to A5
+/Courier             % name the desired font
+20 selectfont        % choose the size in points and establish 
+                     % the font as the current one
+ 72 50 moveto        % position the current point at 
+                     % coordinates 72, 500 (the origin is at the 
+                     % lower-left corner of the page)
+(Hello world!) show  % paint the text in parentheses
+showpage             % print all on the page
+```
+@LIA.postscript
 
 ### Prolog : `@LIA.prolog`
 
@@ -1348,6 +1488,50 @@ For more information, you can visit the [V programming language Wikipedia page](
 println("Hello World")
 ```
 @LIA.v_withShell
+
+### Verilog : `@LIA.verilog`
+
+Verilog is a hardware description language (HDL) used for designing digital circuits and systems. It was first introduced in the 1980s and has since become a standard language for modeling and simulating digital circuits. Verilog is known for its simplicity, expressiveness, and support for both behavioral and structural modeling of hardware components. It is widely used in the semiconductor industry for designing integrated circuits, field-programmable gate arrays (FPGAs), and other digital systems. The backend here uses the Icarus Verilog simulator to execute Verilog code, ensuring compatibility and efficient simulation of digital circuits.
+
+For more information, you can visit the [Verilog programming language Wikipedia page](https://en.wikipedia.org/wiki/Verilog).
+
+---
+
+```verilog
+module hello_world;
+  initial begin
+    $display("Hello, world!");
+    $finish;
+  end
+endmodule
+```
+@LIA.verilog
+
+### VHDL : `@LIA.vhdl`
+
+VHDL (VHSIC Hardware Description Language) is a hardware description language used for designing digital circuits and systems. It was developed in the 1980s as part of the U.S. Department of Defense's VHSIC (Very High-Speed Integrated Circuit) program. VHDL is known for its versatility, expressiveness, and support for both behavioral and structural modeling of hardware components. It is widely used in the semiconductor industry for designing integrated circuits, field-programmable gate arrays (FPGAs), and other digital systems. The backend here uses the GHDL simulator to execute VHDL code, ensuring compatibility and efficient simulation of digital circuits.
+
+For more information, you can visit the [VHDL programming language Wikipedia page](https://en.wikipedia.org/wiki/VHDL).
+
+---
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity hello_world is
+end hello_world;
+
+architecture rtl of hello_world is
+begin
+  process
+  begin
+    report "Hello, world!";
+    wait;
+  end process;
+end rtl;
+```
+@LIA.vhdl(hello_world)
 
 ### Zig : `@LIA.zig`
 
