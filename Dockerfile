@@ -221,10 +221,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y iverilog
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghdl
 
 ### Octave
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y octave
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y octave
 
 ### COQ
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y coq
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y coq
 
 #############################################################################################
 COPY . /coderunner
