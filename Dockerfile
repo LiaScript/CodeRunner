@@ -190,35 +190,35 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
 
 ### Kotlin
 # Install SDKMAN
-RUN curl -s "https://get.sdkman.io" | bash
+#RUN curl -s "https://get.sdkman.io" | bash
 
 # Install Kotlin and set up environment
-RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install kotlin && sdk install java"
+#RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install kotlin && sdk install java"
 
 # Set environment variables for SDKMAN in Docker
-ENV SDKMAN_DIR="/root/.sdkman"
-ENV PATH="$SDKMAN_DIR/bin:$SDKMAN_DIR/candidates/kotlin/current/bin:$PATH"
+#ENV SDKMAN_DIR="/root/.sdkman"
+#ENV PATH="$SDKMAN_DIR/bin:$SDKMAN_DIR/candidates/kotlin/current/bin:$PATH"
 
 # Verify installation
-RUN kotlin -version
+#RUN kotlin -version
 
 ### PostScript
-RUN sed -i 's/main$/main contrib non-free non-free-firmware/' /etc/apt/sources.list && \
-    DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y ghostscript
+#RUN sed -i 's/main$/main contrib non-free non-free-firmware/' /etc/apt/sources.list && \
+#    DEBIAN_FRONTEND=noninteractive apt-get update && \
+#    DEBIAN_FRONTEND=noninteractive apt-get install -y ghostscript
 
 
 ### Lua
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y lua5.4
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y lua5.4
 
 ### D
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gdc
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gdc
 
 ### Verilog
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y iverilog
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y iverilog
 
 ### VHDL
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghdl
+#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghdl
 
 ### Octave
 #RUN DEBIAN_FRONTEND=noninteractive apt-get install -y octave
