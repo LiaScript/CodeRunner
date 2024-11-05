@@ -174,8 +174,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libffi-dev \
     libxml2-dev \
     libssl-dev \
     zlib1g-dev \
-    git && \
-    rm -rf /var/lib/apt/lists/*
+    git
 
 # Clone the Io language repository with submodules
 RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
@@ -209,7 +208,7 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
 
 
 ### Lua
-#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y lua5.4
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y lua5.4
 
 ### D
 #RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gdc
