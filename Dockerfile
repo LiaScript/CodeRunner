@@ -214,10 +214,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y lua5.4
 #RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gdc
 
 ### Verilog
-#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y iverilog
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y iverilog
 
 ### VHDL
-#RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghdl
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghdl
 
 ### Octave
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y octave
