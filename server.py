@@ -295,7 +295,8 @@ class Project:
         finish message, when it is done. 
         '''
         try:
-            self.process.destroy()
+            if self.process:
+                self.process.destroy()
         except Exception as _:
             pass
 
