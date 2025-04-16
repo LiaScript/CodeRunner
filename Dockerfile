@@ -222,7 +222,7 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
 #RUN kotlin -version
 
 # Solidity
-RUN add-apt-repository ppa:ethereum/ethereum \
+RUN add-apt-repository -y ppa:ethereum/ethereum \
     && apt-get update \
     && apt-get install -y solc
 
