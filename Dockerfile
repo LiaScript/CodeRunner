@@ -13,6 +13,7 @@ RUN apt-get install -y \
     git \
     make \
     cmake \
+    software-properties-common \
     # C/C++
     gcc-12 \
     gcc-12-base \
@@ -21,8 +22,13 @@ RUN apt-get install -y \
     libstdc++-12-doc \
     # Python
     python2.7 \
+    # Python3
     python3 \
     python3-pip \
+    ninja-build \
+    ffmpeg \
+    libcairo2-dev \
+    libpango1.0-dev \
     # MONO
     mono-complete \
     mono-mcs \
@@ -115,7 +121,12 @@ RUN apt-get install -y \
     inform \
     frotz \
     ncurses-bin \
-    musl
+    musl \
+    # R
+    r-base \
+    r-cran-car \
+    r-cran-mapdata \
+    r-cran-reshape
 
 ##################################################################################
 ### JAVA
@@ -123,12 +134,6 @@ RUN apt-get install -y \
 RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb \
     && dpkg -i jdk-24_linux-x64_bin.deb \
     && rm jdk-24_linux-x64_bin.deb
-
-### R
-RUN apt-get install -y r-base \
-    r-cran-car \
-    r-cran-mapdata \
-    r-cran-reshape
 
 ### Julia
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
@@ -153,16 +158,9 @@ RUN cd v &&\
     ./v symlink
 
 ### Python3
-RUN apt-get install -y \
-    ninja-build \
-    ffmpeg \
-    libcairo2-dev \
-    libpango1.0-dev
-
 # Install the latest version of meson
-RUN pip3 install --upgrade meson
-
-RUN pip3 install \
+RUN pip3 install --upgrade meson \
+    && pip3 install \
     matplotlib \
     numpy \
     opencv-python opencv-contrib-python \
@@ -185,7 +183,6 @@ RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/
 RUN curl -O https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=19.0/linux_64_19.0.50027_unicode.x86_64.deb \
     && dpkg -i linux_64_19.0.50027_unicode.x86_64.deb \
     && rm linux_64_19.0.50027_unicode.x86_64.deb
-
 
 ### IO
 # Install dependencies
