@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install Heroku CLI
+        run: |
+          npm install -g heroku
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
