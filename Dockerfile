@@ -133,7 +133,8 @@ RUN apt-get install -y r-base \
     r-cran-reshape
 
 ### Julia
-RUN curl -fsSL https://install.julialang.org | sh -s -- -y
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
+    && . /root/.bashrc
 
 ### Zig
 RUN curl -fLO https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz \
