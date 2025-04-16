@@ -14,6 +14,8 @@ RUN apt-get install -y --no-install-recommends \
     make \
     cmake \
     software-properties-common \
+    tar \
+    xz-utils \
     # C/C++
     gcc-12 \
     gcc-12-base \
@@ -139,11 +141,11 @@ RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb 
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y
 
 ### Zig
-RUN curl -fLO https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz \
-    && tar -xf zig-linux-x86_64-0.13.0.tar.xz \
-    && rm zig-linux-x86_64-0.13.0.tar.xz \
-    && mv zig-linux-x86_64-0.13.0/ /opt/ \
-    && ln -s /opt/zig-linux-x86_64-0.13.0/zig /usr/local/bin/zig
+RUN curl -fLO https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz \
+    && tar -xf zig-linux-x86_64-0.14.0.tar.xz \
+    && rm zig-linux-x86_64-0.14.0.tar.xz \
+    && mv zig-linux-x86_64-0.14.0/ /opt/ \
+    && ln -s /opt/zig-linux-x86_64-0.14.0/zig /usr/local/bin/zig
 
 ### Nim
 RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
