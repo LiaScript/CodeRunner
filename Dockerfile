@@ -207,27 +207,11 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
     cd ../.. && \
     rm -rf io
 
-### Kotlin
-# Install SDKMAN
-#RUN curl -s "https://get.sdkman.io" | bash
-
-# Install Kotlin and set up environment
-#RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install kotlin && sdk install java"
-
-# Set environment variables for SDKMAN in Docker
-#ENV SDKMAN_DIR="/root/.sdkman"
-#ENV PATH="$SDKMAN_DIR/bin:$SDKMAN_DIR/candidates/kotlin/current/bin:$PATH"
-
-# Verify installation
-#RUN kotlin -version
-
 # Solidity
-RUN add-apt-repository -y ppa:ethereum/ethereum \
-    && apt-get update \
-    && apt-get install -y solc
+RUN npm install --global solc
 
 # Q# (Quantum)
-#RUN dotnet tool install -g Microsoft.Quantum.IQSharp
+RUN dotnet tool install -g Microsoft.Quantum.IQSharp
 
 #############################################################################################
 COPY . /coderunner
