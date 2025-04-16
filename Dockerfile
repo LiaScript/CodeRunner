@@ -118,8 +118,6 @@ RUN apt-get install -y \
     musl
 
 ##################################################################################
-RUN apt-get install -y make
-
 ### JAVA
 #RUN apt-get install -y default-jdk
 RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb \
