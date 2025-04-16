@@ -107,6 +107,7 @@ RUN apt-get install -y --no-install-recommends \
     php \
     # NodeJS
     nodejs \
+    npm \
     # AWK
     gawk \
     # REXX
