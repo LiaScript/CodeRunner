@@ -32,8 +32,8 @@ RUN apt-get install -y \
     rustc \
     # Haskell
     ghc \
-    # .NET 6
-    dotnet6 apt-transport-https \
+    # .NET 8
+    dotnet8 apt-transport-https \
     # Perl
     perl \
     # Ruby
