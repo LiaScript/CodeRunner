@@ -196,7 +196,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -210,7 +210,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
@@ -225,7 +225,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 <Project Sdk="Microsoft.Quantum.Sdk/0.28.302812">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 </Project>
 ```
@@ -1212,7 +1212,7 @@ For more information, you can visit the [Prolog programming language Wikipedia p
 
 ---
 
-```prolog
+``` prolog
 likes(mary, chocolate).
 likes(mary, wine).
 likes(john, wine).
@@ -1230,7 +1230,7 @@ query :-
 
 Additionally, you can also use the `@LIA.prolog_withShell` macro, which will start a Prolog shell after the code has been executed.
 
-```prolog
+``` prolog
 likes(mary, chocolate).
 likes(mary, wine).
 likes(john, wine).
@@ -1463,6 +1463,19 @@ For more information, you can visit the [Smalltalk programming language Wikipedi
 ```
 @LIA.smalltalk
 
+### Standard ML : `@LIA.sml`
+
+Standard ML (SML) is a functional programming language that was developed in the 1980s as a standardized version of the ML programming language. It is known for its strong type system, pattern matching, and type inference capabilities, making it ideal for developing reliable and efficient software. SML features a clean and expressive syntax that emphasizes functional programming concepts, such as higher-order functions, currying, and immutability. It is widely used in academia and research for teaching programming languages and compiler construction. The backend here uses the SML/NJ compiler to execute Standard ML code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Standard ML programming language Wikipedia page](https://en.wikipedia.org/wiki/Standard_ML).
+
+---
+
+``` sml
+print "Hello, world!\n";
+```
+@LIA.eval(`["main.sml"]`, `none`, `sml main.sml`)
+
 ### TCL : `@LIA.tcl`
 
 Tcl (Tool Command Language) is a high-level, interpreted programming language known for its simplicity, flexibility, and extensibility. Developed by John Ousterhout in the late 1980s, Tcl is designed to be easy to learn and use, with a minimalistic syntax that emphasizes commands and procedures. Tcl is widely used for scripting, automation, and rapid prototyping, as well as for embedding in applications and extending with custom functionality. The backend here uses the Tcl interpreter to execute Tcl code, ensuring compatibility and efficient execution.
@@ -1475,6 +1488,22 @@ For more information, you can visit the [Tcl programming language Wikipedia page
 puts "Hello, world!"
 ```
 @LIA.tcl
+
+
+### Vala : `@LIA.vala`
+
+Vala is a high-level, object-oriented programming language developed by Jürg Billeter and Raffaele Sandrini in 2006. It is designed to be a modern alternative to C and C++, with a focus on simplicity, performance, and ease of use. Vala is known for its clean syntax, memory safety, and interoperability with existing libraries and frameworks. It is widely used for developing desktop applications, system utilities, and software libraries. Vala compiles to C code and uses the GObject system for object-oriented programming, making it compatible with the GNOME ecosystem. The backend here uses the Vala compiler to compile Vala code, ensuring efficient execution and compatibility with the GNOME platform.
+
+For more information, you can visit the [Vala programming language Wikipedia page](https://en.wikipedia.org/wiki/Vala_%28programming_language%29).
+
+---
+
+```vala
+void main () {
+    print ("Hello, world!\n");
+}
+```
+@LIA.eval(`["main.vala"]`, `valac main.vala -o main`, `./main`)
 
 ### V : `@LIA.v`
 

@@ -167,8 +167,7 @@ RUN apt-get install -y libffi-dev \
     libpcre3-dev \
     libxml2-dev \
     libssl-dev \
-    zlib1g-dev \
-    git
+    zlib1g-dev
 
 # Clone the Io language repository with submodules
 RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
@@ -195,7 +194,43 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
 # Verify installation
 #RUN kotlin -version
 
+RUN apt-get install -y \
+    # Standard ML
+    smlnj \
+    # Kotlin
+    kotlin \
+    # PHP
+    php \
+    # NodeJS
+    nodejs \
+    # AWK
+    gawk \
+    # REXX
+    regina-rexx \
+    # Haxe
+    haxe \
+    # Modula-2
+    gm2 \
+    libgm2-12-dev \
+    # Objective-C
+    gobjc \
+    # Objective-C++
+    gobjc++ \
+    # Basic
+    bwbasic \
+    # Inform
+    inform \
+    frotz \
+    ncurses-bin \
+    musl
 
+# Solidity
+RUN add-apt-repository ppa:ethereum/ethereum \
+    && apt-get update \
+    && apt-get install -y solc
+
+# Q# (Quantum)
+#RUN dotnet tool install -g Microsoft.Quantum.IQSharp
 
 #############################################################################################
 COPY . /coderunner
