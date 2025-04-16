@@ -16,6 +16,9 @@ RUN apt-get install -y --no-install-recommends \
     software-properties-common \
     tar \
     xz-utils \
+    python3-dev \
+    pkg-config \
+    build-essential \
     # C/C++
     gcc-12 \
     gcc-12-base \
