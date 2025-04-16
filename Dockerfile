@@ -87,7 +87,35 @@ RUN apt-get install -y \
     # COQ
     coq \
     # VALA
-    valac
+    valac \
+    # Standard ML
+    smlnj \
+    # Kotlin
+    kotlin \
+    # PHP
+    php \
+    # NodeJS
+    nodejs \
+    # AWK
+    gawk \
+    # REXX
+    regina-rexx \
+    # Haxe
+    haxe \
+    # Modula-2
+    gm2 \
+    libgm2-12-dev \
+    # Objective-C
+    gobjc \
+    # Objective-C++
+    gobjc++ \
+    # Basic
+    bwbasic \
+    # Inform
+    inform \
+    frotz \
+    ncurses-bin \
+    musl
 
 ##################################################################################
 RUN apt-get install -y make
@@ -163,7 +191,6 @@ RUN curl -O https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?
 ### IO
 # Install dependencies
 RUN apt-get install -y libffi-dev \
-    cmake \
     libpcre3-dev \
     libxml2-dev \
     libssl-dev \
@@ -193,36 +220,6 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
 
 # Verify installation
 #RUN kotlin -version
-
-RUN apt-get install -y \
-    # Standard ML
-    smlnj \
-    # Kotlin
-    kotlin \
-    # PHP
-    php \
-    # NodeJS
-    nodejs \
-    # AWK
-    gawk \
-    # REXX
-    regina-rexx \
-    # Haxe
-    haxe \
-    # Modula-2
-    gm2 \
-    libgm2-12-dev \
-    # Objective-C
-    gobjc \
-    # Objective-C++
-    gobjc++ \
-    # Basic
-    bwbasic \
-    # Inform
-    inform \
-    frotz \
-    ncurses-bin \
-    musl
 
 # Solidity
 RUN add-apt-repository ppa:ethereum/ethereum \
