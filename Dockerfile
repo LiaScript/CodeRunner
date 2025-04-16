@@ -136,8 +136,9 @@ RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb 
     && rm jdk-24_linux-x64_bin.deb
 
 ### Julia
-RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
-    && . /root/.bashrc
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y -p /usr/local \
+    && ln -s /usr/local/bin/julia /usr/local/bin/julia \
+    && julia --version
 
 ### Zig
 RUN curl -fLO https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz \
