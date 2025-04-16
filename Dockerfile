@@ -85,16 +85,18 @@ RUN apt-get install -y \
     # Octave
     octave \
     # COQ
-    coq
+    coq \
+    # VALA
+    valac
 
 ##################################################################################
 RUN apt-get install -y make
 
 ### JAVA
 #RUN apt-get install -y default-jdk
-RUN curl -O https://download.oracle.com/java/23/latest/jdk-23_linux-x64_bin.deb \
-    && dpkg -i jdk-23_linux-x64_bin.deb \
-    && rm jdk-23_linux-x64_bin.deb
+RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb \
+    && dpkg -i jdk-24_linux-x64_bin.deb \
+    && rm jdk-24_linux-x64_bin.deb
 
 ### R
 RUN apt-get install -y r-base \
