@@ -137,6 +137,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.ada:               @LIA.eval(`["main.ada"]`, `gnatmake main.ada`, `./main`)
 @LIA.algol:             @LIA.eval(`["main.alg"]`, `none`, `a68g main.alg`)
 @LIA.apl:               @LIA.eval(`["main.apl"]`, `none`, `dyalog -script main.apl`)
+@LIA.awk:               @LIA.eval(`["main.awk"]`, `none`, `awk -f main.awk`)
+@LIA.basic:             @LIA.eval(`["main.bas"]`, `none`, `bwbasic main.bas`)
 @LIA.c:                 @LIA.eval(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
 @LIA.clojure:           @LIA.eval(`["main.clj"]`, `none`, `clojure -M main.clj`)
 @LIA.clojure_withShell: @LIA.eval(`["main.clj"]`, `none`, `clojure -M -i main.clj -r`)
@@ -153,6 +155,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 @LIA.haskell_withShell: @LIA.eval(`["main.hs"]`, `none`, `ghci main.hs`)
+@LIA.haxe:              @LIA.eval(`["Main.hx"]`, `none`, `haxe -main Main --interp`)
+@LIA.inform:            @LIA.eval(`["main.inf"]`, `inform -o main.inf > compile.log && [ -f "main.z5" ] || { cat compile.log >&2; exit 1; }`, `/usr/games/dfrotz main.z5`)
 @LIA.io:                @LIA.eval(`["main.io"]`, `none`, `io main.io`)
 @LIA.io_withShell:      @LIA.eval(`["main.io"]`, `none`, `io -i main.io`)
 @LIA.java:              @LIA.eval(`["@0.java"]`, `javac @0.java`, `java @0`)
@@ -163,9 +167,11 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.mono:              @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.nasm:              @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
 @LIA.nim:               @LIA.eval(`["main.nim"]`, `nim c main.nim`, `./main`)
+@LIA.nodejs:            @LIA.eval(`["main.js"]`, `none`, `node main.js`)
 @LIA.ocaml:             @LIA.eval(`["main.ml"]`, `none`, `ocaml main.ml`)
 @LIA.perl:              @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl main.pl`)
 @LIA.perl_withShell:    @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl -d main.pl`)
+@LIA.php:               @LIA.eval(`["main.php"]`, `none`, `php main.php`)
 @LIA.postscript:        @LIA.eval(`["input.ps"]`, `none`, `gs -sDEVICE=png16m -r300 -o output.png input.ps`)
 @LIA.prolog:            @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl -g @0 -t halt`)
 @LIA.prolog_withShell:  @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl`)
@@ -534,6 +540,43 @@ _start:   mov       rax, 1                  ; system call for write
 message:  db        "Hello, World", 10      ; note the newline at the end
 ```
 @LIA.nasm
+
+### AWK : `@LIA.awk`
+
+AWK is a versatile and powerful programming language that is primarily used for text processing and data extraction. It was developed in the 1970s by Alfred Aho, Peter Weinberger, and Brian Kernighan, and its name is derived from their initials. AWK provides a rich set of features for pattern matching, text manipulation, and data processing, making it a popular choice for working with structured data files, log files, and reports. The backend here uses the GNU AWK interpreter, which is a free and open-source implementation of the AWK language, providing a flexible and efficient environment for writing AWK scripts.
+
+For more information, you can visit the [AWK programming language Wikipedia page](https://en.wikipedia.org/wiki/AWK).
+
+---
+
+```awk
+BEGIN {
+    print "Hello, World!"
+}
+```
+@LIA.awk
+
+### Basic (bwbasic) : `@LIA.basic`
+
+BASIC (Beginner's All-purpose Symbolic Instruction Code) is a high-level programming language that was developed in the 1960s to provide an easy-to-learn and easy-to-use language for beginners. BASIC is known for its simplicity and readability, making it an ideal language for teaching programming concepts to novices. The backend here uses the BWBASIC interpreter, which is a modern implementation of the original BASIC language, providing a simple and interactive environment for writing and executing BASIC code.
+
+For more information, you can visit the [BASIC programming language Wikipedia page](https://en.wikipedia.org/wiki/BASIC).
+
+---
+
+```basic
+10 PRINT "Hello, World!"
+20 SYSTEM
+```
+@LIA.basic
+
+... or stay in the shell, by using `END`
+
+```basic
+10 PRINT "Hello, World!"
+20 END
+```
+@LIA.basic
 
 ### C : `@LIA.c`
 
@@ -904,6 +947,82 @@ main = putStrLn "hello world"
 ```
 @LIA.haskell_withShell
 
+### Haxe : `@LIA.haxe`
+
+Haxe is a high-level, cross-platform programming language that was developed by Nicolas Cannasse in 2005. It is known for its versatility, performance, and ease of use, making it ideal for building web applications, games, and mobile apps. Haxe is a strongly typed language that compiles to multiple target platforms, including JavaScript, C++, and Java, allowing developers to write code once and deploy it across different environments. The backend here uses the Haxe compiler to execute Haxe code, ensuring compatibility with various platforms and efficient performance.
+
+For more information, you can visit the [Haxe programming language Wikipedia page](https://en.wikipedia.org/wiki/Haxe).
+
+---
+
+``` haxe
+class Main {
+    static function main() {
+        trace("Hello, World!");
+    }
+}
+```
+@LIA.haxe
+
+
+### Inform : `@LIA.inform`
+
+This program is a compiler of Infocom format (also called "Z-machine") text adventure games, written in Inform 6. The Z-machine was developed by Infocom to run its text adventures, and it has since been used by other interactive fiction authors. The Inform 6 compiler is a powerful tool for creating interactive fiction games, providing a high-level language for writing game logic and a virtual machine for executing the compiled games. The backend here uses the Inform 6 compiler to compile Inform code, ensuring compatibility with the Z-machine and the ability to run text adventure games.
+
+For more information, you can visit the [Inform programming language Wikipedia page](https://en.wikipedia.org/wiki/Inform).
+---
+
+``` inform
+Constant Story "Hello Deductible";
+Constant Headline "^An Interactive Example^";
+
+Include "Parser";
+Include "VerbLib";
+
+[ Initialise;
+    location = Living_Room;
+    "Hello World";
+];
+
+Object Kitchen "Kitchen";
+Object Front_Door "Front Door";
+
+Object Living_Room "Living Room"
+    with
+        description "A comfortably furnished living room.",
+        n_to Kitchen,
+        s_to Front_Door,
+    has light;
+
+Object -> Salesman "insurance salesman"
+    with
+        name 'insurance' 'salesman' 'man',
+        description "An insurance salesman in a tacky polyester
+              suit.  He seems eager to speak to you.",
+        before [;
+            Listen:
+                move Insurance_Paperwork to player;
+                "The salesman bores you with a discussion
+                 of life insurance policies.  From his
+                 briefcase he pulls some paperwork which he
+                 hands to you.";
+        ],
+    has animate;
+
+Object -> -> Briefcase "briefcase"
+    with
+        name 'briefcase' 'case',
+        description "A slightly worn, black briefcase.",
+    has container;
+
+Object -> -> -> Insurance_Paperwork "insurance paperwork"
+    with
+        name 'paperwork' 'papers' 'insurance' 'documents' 'forms',
+        description "Page after page of small legalese.";
+
+Include "Grammar";
+```
+@LIA.inform
 
 ### IO : `@LIA.io`
 
@@ -1097,6 +1216,26 @@ print("Hello, world!")
 ```
 @LIA.lua
 
+### Modula 2 : `@LIA.modula2`
+
+Modula-2 is a procedural programming language developed by Niklaus Wirth in the late 1970s as a successor to Pascal. It is known for its simplicity, strong typing, and modular programming features, making it ideal for teaching programming concepts and developing reliable software. Modula-2 introduced many concepts that are now common in modern programming languages, such as modules, data abstraction, and exception handling. The backend here uses the GNU Modula-2 compiler to compile Modula-2 code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Modula-2 programming language Wikipedia page](https://en.wikipedia.org/wiki/Modula-2).
+
+---
+
+```modula2
+MODULE HelloWorld;
+
+FROM TextIO IMPORT WriteString, WriteLn;
+
+BEGIN
+  WriteString("Hello, World!");
+  WriteLn;
+END HelloWorld.
+```
+@LIA.eval(`["HelloWorld.mod"]`, `gm2 HelloWorld.mod`, `./HelloWorld`)
+
 ### Nim : `@LIA.nim`
 
 Nim is a statically typed, compiled programming language that combines the performance of C with the expressiveness of modern languages like Python. First released in 2008, Nim is known for its simplicity, efficiency, and flexibility, making it suitable for systems programming, web development, and scientific computing. Nim features a powerful metaprogramming system, automatic memory management, and a syntax that is easy to read and write. It compiles to C, C++, and JavaScript, enabling cross-platform development with high performance. The backend here uses the Nim compiler to execute Nim code, ensuring efficient and optimized output.
@@ -1109,6 +1248,64 @@ For more information, you can visit the [Nim programming language Wikipedia page
 echo "Hello World"
 ```
 @LIA.nim
+
+### Node.js : `@LIA.nodejs`
+
+Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. It allows you to run JavaScript code outside of a web browser, enabling server-side scripting, command-line tools, and automation tasks. Node.js provides a rich set of libraries and frameworks for building web applications, APIs, and microservices. It is known for its event-driven, non-blocking I/O model, which allows for high concurrency and scalability. The backend here uses the Node.js runtime to execute JavaScript code, ensuring compatibility with the latest ECMAScript features and access to the Node.js ecosystem.
+
+For more information, you can visit the [Node.js Wikipedia page](https://en.wikipedia.org/wiki/Node.js).
+
+---
+
+```javascript
+console.log("Hello, World!");
+```
+@LIA.nodejs
+
+
+### Objective-C : `@LIA.objectivec`
+
+Objective-C is a general-purpose, object-oriented programming language that was developed by Brad Cox and Tom Love in the early 1980s. It is known for its dynamic runtime, message-passing syntax, and close integration with the C programming language. Objective-C was the primary language used for developing macOS and iOS applications before the introduction of Swift. It provides a rich set of features for building graphical user interfaces, handling events, and managing memory, making it ideal for developing desktop and mobile applications. The backend here uses the Clang compiler to compile Objective-C code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Objective-C programming language Wikipedia page](https://en.wikipedia.org/wiki/Objective-C).
+
+---
+
+```objectivec
+#import <Foundation/Foundation.h>
+
+int main (int argc, const char * argv[])
+{
+    @autoreleasepool {
+        NSLog (@"Hello, World!");
+    }
+    return 0;
+}
+```
+@LIA.eval(`["main.m"]`, `gobjc main.m -o main -framework Foundation`, `./main`)
+
+### Objective C++ : `@LIA.objectivecpp`
+
+Objective-C++ is a hybrid programming language that combines the features of Objective-C and C++. It allows developers to write code that leverages the object-oriented features of Objective-C and the performance and flexibility of C++. Objective-C++ is commonly used in macOS and iOS development to create applications that require both the power of C++ and the rich frameworks provided by Apple. The backend here uses the Clang compiler to compile Objective-C++ code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [Objective-C++ programming language Wikipedia page](https://en.wikipedia.org/wiki/Objective-C%2B%2B).
+
+---
+
+```objectivecpp
+#import <Foundation/Foundation.h>
+#import <iostream>
+
+int main (int argc, const char * argv[])
+{
+    @autoreleasepool {
+        std::cout << "Hello, World!" << std::endl;
+    }
+    return 0;
+}
+```
+@LIA.eval(`["main.mm"]`, `g++ main.mm -o main -framework Foundation`, `./main`)
+
 
 
 ### OCaml : `@LIA.ocaml`
@@ -1181,6 +1378,21 @@ sub greet {
 my $x = 42;
 ```
 @LIA.perl_withShell
+
+### PHP : `@LIA.php`
+
+PHP is a server-side scripting language designed for web development and general-purpose programming. It was created by Rasmus Lerdorf in 1994 and has since become one of the most widely used languages for building dynamic websites and web applications. PHP is known for its simplicity, flexibility, and extensive library of functions, making it easy to integrate with databases, web servers, and other technologies. It supports object-oriented programming, procedural programming, and functional programming paradigms. The backend here uses the PHP interpreter to execute PHP code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [PHP programming language Wikipedia page](https://en.wikipedia.org/wiki/PHP).
+
+---
+
+```php
+<?php
+echo "Hello, world!";
+?>
+```
+@LIA.php
 
 ### PostScript : `@LIA.postscript`
 
@@ -1315,6 +1527,25 @@ plt.savefig('temp.png')
 ```
 @LIA.eval(`["data.csv", "main.py"]`, `none`, `python3 main.py`, `*`)
 
+### Q# : `@LIA.qsharp`
+
+Q# is a domain-specific programming language developed by Microsoft for quantum computing. It is designed to express quantum algorithms, operations, and simulations in a high-level, expressive manner. Q# provides a rich set of features for developing quantum programs, including quantum data types, quantum operations, and quantum simulators. It is integrated with the Microsoft Quantum Development Kit, which includes a quantum simulator and tools for developing, testing, and debugging quantum programs. The backend here uses the Q# compiler to compile Q# code, ensuring compatibility with quantum hardware and simulators.
+
+For more information, you can visit the [Q# programming language Wikipedia page](https://en.wikipedia.org/wiki/Q_Sharp).
+
+---
+
+```qsharp
+namespace HelloWorld {
+    open Microsoft.Quantum.Intrinsic;
+
+    operation SayHello() : Unit {
+        Message("Hello, world!");
+    }
+}
+```
+@LIA.eval(`["HelloWorld.qs"]`, `dotnet build`, `dotnet run`)
+
 ### R : `@LIA.r`
 
 R is a high-level programming language and environment specifically designed for statistical computing and data analysis. First released in 1995 by Ross Ihaka and Robert Gentleman, R is widely used among statisticians, data scientists, and researchers for its powerful statistical packages and data visualization capabilities. It supports a wide range of statistical techniques, from linear and nonlinear modeling to time-series analysis and clustering. R's rich ecosystem of packages and libraries, combined with its scripting capabilities and interactive data analysis features, makes it a preferred choice for data manipulation and graphical representation. The backend here uses the R interpreter to execute R scripts, ensuring robust statistical analysis and data handling.
@@ -1361,6 +1592,20 @@ For more information, you can visit the [Racket programming language Wikipedia p
 (displayln "Hello, world!")
 ```
 @LIA.racket
+
+### REXX : `@LIA.rexx`
+
+REXX (Restructured Extended Executor) is a high-level, procedural programming language developed by IBM in the late 1970s. It is known for its simplicity, readability, and ease of use, making it ideal for scripting, automation, and system administration tasks. REXX provides a rich set of built-in functions and features for string manipulation, file processing, and program control. It is widely used in mainframe environments, such as IBM z/OS, as well as in cross-platform scripting and automation. The backend here uses the Regina REXX interpreter to execute REXX code, ensuring compatibility and efficient execution.
+
+For more information, you can visit the [REXX programming language Wikipedia page](https://en.wikipedia.org/wiki/REXX).
+
+---
+
+```rexx
+/* REXX program to display "Hello, world!" */
+say "Hello, world!"
+```
+@LIA.eval(`["hello.rexx"]`, `none`, `rexx hello.rexx`)
 
 ### Ruby : `@LIA.ruby`
 
@@ -1418,6 +1663,32 @@ fn main() {
 }
 ```
 @LIA.rust
+
+### Solidity : `@LIA.solidity`
+
+Solidity is a high-level, statically typed programming language designed for writing smart contracts on the Ethereum blockchain. It was developed by Gavin Wood, Christian Reitwiessner, and others in 2014 as part of the Ethereum project. Solidity is known for its simplicity, security, and efficiency, making it ideal for creating decentralized applications (dApps) and automated contracts that run on the Ethereum Virtual Machine (EVM). Solidity supports object-oriented programming features, including inheritance, interfaces, and libraries, allowing developers to build complex smart contracts with reusable components. The backend here uses the Solidity compiler to compile Solidity code, ensuring compatibility with the Ethereum blockchain and efficient execution.
+
+For more information, you can visit the [Solidity programming language Wikipedia page](https://en.wikipedia.org/wiki/Solidity).
+
+---
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract HelloWorld {
+    string public message;
+
+    constructor() {
+        message = "Hello, world!";
+    }
+
+    function setMessage(string memory newMessage) public {
+        message = newMessage;
+    }
+}
+```
+@LIA.eval(`["HelloWorld.sol"]`, `none`, `solc HelloWorld.sol`)
 
 ### Scala : `@LIA.scala`
 
@@ -1512,6 +1783,15 @@ V is a statically typed, compiled programming language designed for simplicity, 
 For more information, you can visit the [V programming language Wikipedia page](https://en.wikipedia.org/wiki/V_%28programming_language%29).
 
 ---
+
+```v
+println("Hello World")
+```
+@LIA.v
+
+---
+
+Additionally, you can also use the `@LIA.v_withShell` macro, which will start a V shell after the code has been executed.
 
 ```v
 println("Hello World")
