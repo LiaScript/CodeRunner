@@ -2215,29 +2215,54 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-//window.CodeRunner.init("ws://127.0.0.1:8000/")
+//window.CodeRunner.init("ws://localhost:4000/")
 window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
 
 @LIA.ada:               @LIA.eval(`["main.ada"]`, `gnatmake main.ada`, `./main`)
+@LIA.algol:             @LIA.eval(`["main.alg"]`, `none`, `a68g main.alg`)
+@LIA.apl:               @LIA.eval(`["main.apl"]`, `none`, `dyalog -script main.apl`)
+@LIA.awk:               @LIA.eval(`["main.awk"]`, `none`, `awk -f main.awk`)
+@LIA.basic:             @LIA.eval(`["main.bas"]`, `none`, `bwbasic main.bas`)
 @LIA.c:                 @LIA.eval(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
 @LIA.clojure:           @LIA.eval(`["main.clj"]`, `none`, `clojure -M main.clj`)
 @LIA.clojure_withShell: @LIA.eval(`["main.clj"]`, `none`, `clojure -M -i main.clj -r`)
 @LIA.cpp:               @LIA.eval(`["main.cpp"]`, `g++ main.cpp -o a.out`, `./a.out`)
+@LIA.cobol:             @LIA.eval(`["main.cob"]`, `cobc -x --free main.cob`, `./main`)
+@LIA.coq:               @LIA.eval(`["file.v"]`, `coqc file.v`, `coqtop -lv file.v`)
+@LIA.d:                 @LIA.eval(`["main.d"]`, `gdc main.d`, `./a.out`)
 @LIA.elixir:            @LIA.eval(`["main.exs"]`, `none`, `elixir main.exs`)
 @LIA.elixir_withShell:  @LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
+@LIA.erlang:            @LIA.eval(`["hello.erl"]`, `erlc hello.erl`, `erl -noshell -s hello hello -s init stop`)
+@LIA.erlang_withShell:  @LIA.eval(`["hello.erl"]`, `erlc hello.erl`, `erl -noshell -s hello hello`)
+@LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
+@LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
+@LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
 @LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
+@LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 @LIA.haskell_withShell: @LIA.eval(`["main.hs"]`, `none`, `ghci main.hs`)
+@LIA.haxe:              @LIA.eval(`["Main.hx"]`, `none`, `haxe -main Main --interp`)
+@LIA.inform:            @LIA.eval(`["main.inf"]`, `inform -o main.inf > compile.log && [ -f "main.z5" ] || { cat compile.log >&2; exit 1; }`, `/usr/games/dfrotz main.z5`)
+@LIA.io:                @LIA.eval(`["main.io"]`, `none`, `io main.io`)
+@LIA.io_withShell:      @LIA.eval(`["main.io"]`, `none`, `io -i main.io`)
 @LIA.java:              @LIA.eval(`["@0.java"]`, `javac @0.java`, `java @0`)
 @LIA.julia:             @LIA.eval(`["main.jl"]`, `none`, `julia main.jl`)
 @LIA.julia_withShell:   @LIA.eval(`["main.jl"]`, `none`, `julia -i main.jl`)
+@LIA.kotlin:            @LIA.eval(`["main.kt"]`, `kotlinc main.kt -include-runtime -d main.jar`, `java -jar main.jar`)
+@LIA.lua:               @LIA.eval(`["main.lua"]`, `none`, `lua main.lua`)
 @LIA.mono:              @LIA.eval(`["main.cs"]`, `mcs main.cs`, `mono main.exe`)
 @LIA.nasm:              @LIA.eval(`["main.asm"]`, `nasm -felf64 main.asm && ld main.o`, `./a.out`)
 @LIA.nim:               @LIA.eval(`["main.nim"]`, `nim c main.nim`, `./main`)
+@LIA.nodejs:            @LIA.eval(`["main.js"]`, `none`, `node main.js`)
+@LIA.ocaml:             @LIA.eval(`["main.ml"]`, `none`, `ocaml main.ml`)
 @LIA.perl:              @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl main.pl`)
 @LIA.perl_withShell:    @LIA.eval(`["main.pl"]`, `perl -c main.pl`, `perl -d main.pl`)
+@LIA.php:               @LIA.eval(`["main.php"]`, `none`, `php main.php`)
+@LIA.postscript:        @LIA.eval(`["input.ps"]`, `none`, `gs -sDEVICE=png16m -r300 -o output.png input.ps`)
+@LIA.prolog:            @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl -g @0 -t halt`)
+@LIA.prolog_withShell:  @LIA.eval(`["main.pl"]`, `none`, `swipl -s main.pl`)
 @LIA.python:            @LIA.python3
 @LIA.python_withShell:  @LIA.python3_withShell
 @LIA.python2:           @LIA.eval(`["main.py"]`, `python2.7 -m compileall .`, `python2.7 main.pyc`)
@@ -2246,11 +2271,19 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.python3_withShell: @LIA.eval(`["main.py"]`, `none`, `python3 -i main.py`)
 @LIA.r:                 @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.r_withShell:       @LIA.eval(`["main.R"]`, `none`, `sh -c "cat main.R - | R --interactive"`)
+@LIA.racket:            @LIA.eval(`["main.rkt"]`, `none`, `racket main.rkt`)
 @LIA.ruby:              @LIA.eval(`["main.rb"]`, `none`, `ruby main.rb`)
 @LIA.ruby_withShell:    @LIA.eval(`["main.rb"]`, `none`, `irb --nomultiline -r ./main.rb`)
 @LIA.rust:              @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
+@LIA.scala:             @LIA.eval(`["@0.scala"]`, `scalac @0.scala`, `scala @0`)
+@LIA.scheme:            @LIA.eval(`["main.scm"]`, `none`, `guile --no-auto-compile main.scm`)
+@LIA.selectscript:      @LIA.eval(`["main.s2"]`, `none`, `S2c -x main.s2`)
+@LIA.smalltalk:         @LIA.eval(`["main.st"]`, `none`, `gst main.st`)
+@LIA.tcl:               @LIA.eval(`["main.tcl"]`, `none`, `tclsh main.tcl`)
 @LIA.v:                 @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.v_withShell:       @LIA.eval(`["main.v"]`, `none`, `sh -c "cat main.v - | v repl"`)
+@LIA.verilog:           @LIA.eval(`["main.v"]`, `iverilog -o main.vvp main.v`, `vvp main.vvp`)
+@LIA.vhdl:              @LIA.eval(`["@0.vhdl"]`, `ghdl -a @0.vhdl && ghdl -e @0`, `ghdl -r @0`)
 @LIA.zig:               @LIA.eval(`["main.zig"]`, `zig build-exe ./main.zig -O ReleaseSmall`, `./main`)
 
 @LIA.dotnet
@@ -2280,6 +2313,18 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 </Project>
 ```
 @LIA.eval(`["Program.fs", "project.fsproj"]`, `dotnet build -nologo`, `dotnet run`)
+@end
+
+@LIA.qsharp
+```xml    -project.csproj
+<Project Sdk="Microsoft.Quantum.Sdk/0.28.302812">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+</Project>
+```
+@LIA.eval(`["Program.qs", "project.csproj"]`, `dotnet build -nologo`, `dotnet run`)
 @end
 
 @LIA.eval:  @LIA.eval_(false,`@0`,@1,@2,@3)
@@ -2390,6 +2435,13 @@ CodeRunner.handle(uid, function (msg) {
                 for(let i = 0; i < msg.images.length; i++) {
                     console.html("<hr/>", msg.images[i].file)
                     console.html("<img title='" + msg.images[i].file + "' src='" + msg.images[i].data + "' onclick='window.LIA.img.click(\"" + msg.images[i].data + "\")'>")
+                }
+            }
+
+            if (msg.videos) {
+                for(let i = 0; i < msg.videos.length; i++) {
+                    console.html("<hr/>", msg.videos[i].file)
+                    console.html("<video controls style='width:100%' title='" + msg.videos[i].file + "' src='" + msg.videos[i].data + "'></video>")
                 }
             }
 
