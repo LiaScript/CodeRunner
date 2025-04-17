@@ -142,7 +142,10 @@ RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb 
     && rm jdk-24_linux-x64_bin.deb
 
 ### Julia
-RUN curl -fsSL https://install.julialang.org | sh -s -- -y
+RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
+    && echo 'export PATH="$PATH:/root/.juliaup/bin"' >> /etc/profile \
+    && echo 'export PATH="$PATH:/root/.juliaup/bin"' >> /root/.bashrc \
+    && ln -s /root/.juliaup/bin/julia /usr/local/bin/julia
 
 ### Zig
 RUN curl -fLO https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz \
@@ -214,6 +217,24 @@ RUN npm install --global solc
 # Q# (Quantum)
 RUN dotnet tool install -g Microsoft.Quantum.IQSharp
 
+# SelectScript
+RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein \
+    -o /usr/local/bin/lein \
+    && chmod +x /usr/local/bin/lein \
+    && git clone --recursive  https://github.com/andre-dietrich/SelectScriptC.git \
+    && cd SelectScriptC \
+    && make \
+    && make install
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libobjc-12-dev \
+    gnustep \
+    gnustep-devel \
+    libgnustep-base-dev \
+    libblocksruntime-dev \
+    clang
+
 #############################################################################################
 COPY . /coderunner
 WORKDIR "/coderunner"
@@ -235,6 +256,32 @@ RUN firejail || true
 RUN firejail || true
 RUN firejail || true
 
+# Modula 2 requirement
+ENV GM2PATH=/usr/share/gm2
+
+RUN mv /usr/bin/gm2 /usr/bin/gm2.real && \
+    printf '#!/bin/sh\nexec /usr/bin/gm2.real -g -I. -flibs=pim,iso,cor "$@"\n' > /usr/bin/gm2 && \
+    chmod +x /usr/bin/gm2 
+
+# Create Objective-C compiler script with GNUstep configuration
+RUN printf '#!/bin/bash\n\
+    if [ $# -lt 1 ]; then\n\
+    echo "Usage: gobjc source_file [output_name]"\n\
+    exit 1\n\
+    fi\n\
+    \n\
+    SOURCEFILE="$1"\n\
+    FILENAME=$(basename -- "$SOURCEFILE")\n\
+    BASENAME="${FILENAME%%.*}"\n\
+    \n\
+    # Use second argument as output name if provided, otherwise use source basename\n\
+    OUTPUT="${2:-$BASENAME}"\n\
+    \n\
+    . /usr/share/GNUstep/Makefiles/GNUstep.sh\n\
+    gcc -std=gnu11 -x objective-c $(gnustep-config --objc-flags) -o "$OUTPUT" "$SOURCEFILE" $(gnustep-config --base-libs)\n\
+    ' > /usr/local/bin/gobjc && \
+    chmod +x /usr/local/bin/gobjc
+
 EXPOSE 4000
 
-CMD python3 -m server --host 0.0.0.0 --port $PORT
+ENTRYPOINT ["python3","-m","server","--host","0.0.0.0","--port","4000"]

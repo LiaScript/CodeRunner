@@ -129,7 +129,7 @@ window.CodeRunner = {
 }
 
 //window.CodeRunner.init("wss://coderunner.informatik.tu-freiberg.de/")
-//window.CodeRunner.init("ws://127.0.0.1:4000/")
+//window.CodeRunner.init("ws://localhost:4000/")
 window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @end
 
@@ -148,6 +148,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.d:                 @LIA.eval(`["main.d"]`, `gdc main.d`, `./a.out`)
 @LIA.elixir:            @LIA.eval(`["main.exs"]`, `none`, `elixir main.exs`)
 @LIA.elixir_withShell:  @LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
+@LIA.erlang:            @LIA.eval(`["hello.erl"]`, `erlc hello.erl`, `erl -noshell -s hello hello -s init stop`)
+@LIA.erlang_withShell:  @LIA.eval(`["hello.erl"]`, `erlc hello.erl`, `erl -noshell -s hello hello`)
 @LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
 @LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
 @LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
@@ -189,6 +191,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.rust:              @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
 @LIA.scala:             @LIA.eval(`["@0.scala"]`, `scalac @0.scala`, `scala @0`)
 @LIA.scheme:            @LIA.eval(`["main.scm"]`, `none`, `guile --no-auto-compile main.scm`)
+@LIA.selectscript:      @LIA.eval(`["main.s2"]`, `none`, `S2c -x main.s2`)
 @LIA.smalltalk:         @LIA.eval(`["main.st"]`, `none`, `gst main.st`)
 @LIA.tcl:               @LIA.eval(`["main.tcl"]`, `none`, `tclsh main.tcl`)
 @LIA.v:                 @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
@@ -700,7 +703,7 @@ Console.WriteLine("Hello, World!");
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -797,6 +800,53 @@ void main()
 ```
 @LIA.d
 
+### Delphi : `@LIA.delphi`
+
+Delphi is an integrated development environment (IDE) and object-oriented programming language based on the Object Pascal language. It was developed by Borland in the mid-1990s and is known for its rapid application development (RAD) capabilities, particularly for Windows applications. Delphi provides a visual programming environment, allowing developers to design user interfaces using drag-and-drop components. The backend here uses the Free Pascal compiler to compile Delphi code, ensuring compatibility with modern Pascal standards.
+
+For more information, you can visit the [Delphi programming language Wikipedia page](https://en.wikipedia.org/wiki/Delphi_%28programming_language%29).
+
+---
+
+``` delphi
+program example001;
+uses
+  SysUtils;
+var
+  i      : Integer;
+  Zahl   : Real;
+  Antwort: Char;
+begin
+  WriteLn('Programmbeispiel Kontrollstrukturen');
+  WriteLn;
+  repeat                  // nicht abweisende Schleife
+    Write('Bitte geben Sie eine Zahl ein: ');
+    ReadLn(Zahl);
+    if Zahl <> 0 then     // einseitige Auswahl
+      Zahl := 1 / Zahl;
+    for i := 1 to 10 do   // Zählschleife
+      Zahl := Zahl * 2;
+    while Zahl > 1 do     // abweisende Schleife
+      Zahl := Zahl / 2;
+    i := Round(Zahl) * 100;
+    case i of             // Fallunterscheidung
+      1: Zahl := Zahl * 2;
+      2: Zahl := Zahl * 4;
+      4: Zahl := Zahl * 8
+    else
+      Zahl := Zahl * 10
+    end;
+    if Zahl <> 0 then     // zweiseitige Auswahl
+      WriteLn(Format('Das Ergebnis lautet %.2f', [Zahl]))
+    else
+      Writeln('Leider ergibt sich der Wert von 0.');
+    Write('Noch eine Berechnung (J/N)? ');
+    ReadLn(Antwort)
+  until UpCase(Antwort) = 'N'
+end.
+```  
+@LIA.eval(`["main.pas"]`, `fpc main.pas`, `./main`)
+
 ### Elixir : `@LIA.elixir`
 
 Elixir is a dynamic, functional programming language designed for building scalable and maintainable applications. It was created by José Valim and first released in 2011. Elixir runs on the Erlang Virtual Machine (BEAM), which provides excellent support for concurrency, fault tolerance, and distributed systems. Elixir leverages the strengths of Erlang while offering a more modern syntax and powerful metaprogramming capabilities. It is widely used for web development, embedded systems, and applications requiring high reliability. The backend here uses the Elixir compiler to execute Elixir code, ensuring robust and efficient performance on the BEAM platform.
@@ -817,7 +867,36 @@ Additionally, you can also use the `@LIA.elixir_withShell` macro, which will sta
 ```elixir
 IO.puts "Hello World"
 ```
-@LIA.eval(`["main.exs"]`, `none`, `iex main.exs`)
+@LIA.elixir_withShell
+
+
+### Erlang : `@LIA.erlang`
+
+Erlang is a functional programming language designed for building concurrent, distributed, and fault-tolerant systems. It was developed by Ericsson in the late 1980s and is known for its lightweight processes, message-passing concurrency model, and hot code swapping capabilities. Erlang is particularly well-suited for telecommunications, real-time systems, and applications requiring high availability. The backend here uses the Erlang compiler to execute Erlang code, ensuring efficient performance and reliability.
+
+For more information, you can visit the [Erlang programming language Wikipedia page](https://en.wikipedia.org/wiki/Erlang_%28programming_language%29).
+
+---
+
+```erlang
+-module(hello).
+-export([hello/0]).
+hello() ->
+    io:format("Hello, World!~n").
+```
+@LIA.erlang
+
+---
+
+Additionally, you can also use the `@LIA.erlang_withShell` macro, which will start an Erlang shell after the code has been executed.
+
+```erlang
+-module(hello).
+-export([hello/0]).
+hello() ->
+    io:format("Hello, World!~n").
+```
+@LIA.erlang_withShell
 
 
 ### F# : `@LIA.fsharp`
@@ -851,7 +930,7 @@ printfn "Hello from F#"
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -1225,16 +1304,15 @@ For more information, you can visit the [Modula-2 programming language Wikipedia
 ---
 
 ```modula2
-MODULE HelloWorld;
+MODULE hello ;
 
-FROM TextIO IMPORT WriteString, WriteLn;
+FROM StrIO IMPORT WriteString, WriteLn ;
 
 BEGIN
-  WriteString("Hello, World!");
-  WriteLn;
-END HelloWorld.
+   WriteString ('hello world') ; WriteLn
+END hello.
 ```
-@LIA.eval(`["HelloWorld.mod"]`, `gm2 HelloWorld.mod`, `./HelloWorld`)
+@LIA.eval(`["hello.mod"]`, `gm2 hello.mod`, `./a.out`)
 
 ### Nim : `@LIA.nim`
 
@@ -1272,41 +1350,18 @@ For more information, you can visit the [Objective-C programming language Wikipe
 ---
 
 ```objectivec
+// 'Hello World' Program in Objective-C
 #import <Foundation/Foundation.h>
 
 int main (int argc, const char * argv[])
 {
-    @autoreleasepool {
-        NSLog (@"Hello, World!");
-    }
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog (@"Hello, World!");
+    [pool drain];
     return 0;
 }
 ```
-@LIA.eval(`["main.m"]`, `gobjc main.m -o main -framework Foundation`, `./main`)
-
-### Objective C++ : `@LIA.objectivecpp`
-
-Objective-C++ is a hybrid programming language that combines the features of Objective-C and C++. It allows developers to write code that leverages the object-oriented features of Objective-C and the performance and flexibility of C++. Objective-C++ is commonly used in macOS and iOS development to create applications that require both the power of C++ and the rich frameworks provided by Apple. The backend here uses the Clang compiler to compile Objective-C++ code, ensuring compatibility and efficient execution.
-
-For more information, you can visit the [Objective-C++ programming language Wikipedia page](https://en.wikipedia.org/wiki/Objective-C%2B%2B).
-
----
-
-```objectivecpp
-#import <Foundation/Foundation.h>
-#import <iostream>
-
-int main (int argc, const char * argv[])
-{
-    @autoreleasepool {
-        std::cout << "Hello, World!" << std::endl;
-    }
-    return 0;
-}
-```
-@LIA.eval(`["main.mm"]`, `g++ main.mm -o main -framework Foundation`, `./main`)
-
-
+@LIA.eval(`["main.m"]`, `gobjc main.m`, `./main`)
 
 ### OCaml : `@LIA.ocaml`
 
@@ -1664,6 +1719,117 @@ fn main() {
 ```
 @LIA.rust
 
+### SelectScript : `@LIA.selectscript`
+
+https://github.com/andre-dietrich/SelectScriptC/tree/master
+
+``` sql
+mov
+  = PROC(Tower, frm, to)
+    "A simple tower move function that returns a new tower configuration:
+     mov([[3,2,1], [], []], 0, 1) -> [[3,2], [1], []]
+
+     In case of an unalowed move a None value gets returned:
+     mov([[3,2], [1], []], 0, 1)  -> None "
+    : ( IF( $Tower == None, EXIT None);
+
+        IF( not $Tower[$frm], EXIT None);
+
+        IF( $Tower[$to],
+            IF( $Tower[$frm][-1] > $Tower[$to][-1],
+                EXIT None));
+
+        $Tower[$to]@+( $Tower[$frm][-1] );
+        $Tower[$frm]@pop();
+        $Tower;
+      );
+
+
+# initial tower configuration
+tower = [[3,2,1], [], []];
+
+# allowed moves [from, to]
+moves = [[0,1], [0,2], [1,0], [1,2], [2,0], [2,1]];
+
+# goal configuration
+finish = [[], [], [3,2,1]];
+
+
+
+# vanilla-approach: recusively test all combinations for 7 moves
+$start_time = time();
+rslt1 = SELECT [$m1, $m2, $m3, $m4, $m5, $m6, $m7]
+          FROM m1:moves, m2:moves, m3:moves, m4:moves,
+               m5:moves, m6:moves, m7:moves
+         WHERE finish == (tower
+                          |> mov($m1[0], $m1[1])
+                          |> mov($m2[0], $m2[1])
+                          |> mov($m3[0], $m3[1])
+                          |> mov($m4[0], $m4[1])
+                          |> mov($m5[0], $m5[1])
+                          |> mov($m6[0], $m6[1])
+                          |> mov($m7[0], $m7[1]))
+           AS list;
+
+print("######################################################################");
+print("first vanilla-approach search");
+print("time:   ", time()-$start_time);
+print("result: ", rslt1);
+
+
+
+$start_time = time();
+rslt2 = SELECT $m
+          FROM m:moves
+         WHERE finish == mov($tower, $m[0], $m[1])
+    START WITH $tower = tower
+    CONNECT BY $tower@mov($m[0], $m[1])
+     STOP WITH $tower == None OR $step$ > 6
+            AS list;
+
+print("######################################################################");
+print("simple CONNECT BY (recursive search)");
+print("time:   ", time()-$start_time);
+print("result: ", rslt2);
+
+
+
+$start_time = time();
+rslt3 = SELECT $tower
+          FROM m:moves
+         WHERE finish == mov($tower, $m[0], $m[1])
+    START WITH $tower = tower
+    CONNECT BY NO CYCLE
+               $tower@mov($m[0], $m[1])
+     STOP WITH $tower == None OR $step$ > 6
+            AS LIST;
+
+print("######################################################################");
+print("CONNECT BY with no cycles");
+print("time:   ", time()-$start_time);
+print("result: ", rslt3);
+
+
+rslt4 = SELECT $step$, $tower, $m
+          FROM m:moves
+         WHERE finish == mov($tower, $m[0], $m[1])
+    START WITH $tower = tower
+    CONNECT BY UNIQUE
+               $tower@mov($m[0], $m[1])
+     STOP WITH $tower == None OR $step$ > 7
+            AS LIST;
+
+print("######################################################################");
+print("CONNECT BY with UNIQUE");
+print("time:   ", time()-$start_time);
+print("result: ", rslt4);
+
+
+True;
+```
+@LIA.selectscript
+
+
 ### Solidity : `@LIA.solidity`
 
 Solidity is a high-level, statically typed programming language designed for writing smart contracts on the Ethereum blockchain. It was developed by Gavin Wood, Christian Reitwiessner, and others in 2014 as part of the Ethereum project. Solidity is known for its simplicity, security, and efficiency, making it ideal for creating decentralized applications (dApps) and automated contracts that run on the Ethereum Virtual Machine (EVM). Solidity supports object-oriented programming features, including inheritance, interfaces, and libraries, allowing developers to build complex smart contracts with reusable components. The backend here uses the Solidity compiler to compile Solidity code, ensuring compatibility with the Ethereum blockchain and efficient execution.
@@ -1688,7 +1854,7 @@ contract HelloWorld {
     }
 }
 ```
-@LIA.eval(`["HelloWorld.sol"]`, `none`, `solc HelloWorld.sol`)
+@LIA.eval(`["HelloWorld.sol"]`, `none`, `solcjs --abi HelloWorld.sol`)
 
 ### Scala : `@LIA.scala`
 
@@ -2092,7 +2258,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -2106,7 +2272,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
