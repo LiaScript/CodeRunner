@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/liascript-coderunner-badge.png)](https://mseep.ai/app/liascript-coderunner)
+
 <!--
 author:   André Dietrich
 
