@@ -137,9 +137,9 @@ RUN apt-get install -y --no-install-recommends \
 ##################################################################################
 ### JAVA
 #RUN apt-get install -y default-jdk
-RUN curl -O https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.deb \
-    && dpkg -i jdk-24_linux-x64_bin.deb \
-    && rm jdk-24_linux-x64_bin.deb
+RUN curl -O https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.deb \
+    && dpkg -i jdk-25_linux-x64_bin.deb \
+    && rm jdk-25_linux-x64_bin.deb
 
 ### Julia
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
