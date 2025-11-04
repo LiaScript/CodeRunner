@@ -17,6 +17,7 @@ window.CodeRunner = {
     error: "",
     url: "",
     firstConnection: true,
+    pingTimer: null,
 
     init(url, step = 0) {
         this.url = url
@@ -39,11 +40,10 @@ window.CodeRunner = {
         this.ws.onopen = function () {
             clearTimeout(connectionTimeout);
             self.log("connections established");
-
             self.connected = true
-            
-            setInterval(function() {
-                self.ws.send("ping")
+            if (self.pingTimer) clearInterval(self.pingTimer)
+            self.pingTimer = setInterval(function() {
+              try { self.ws.send("ping") } catch (_) {}
             }, 15000);
         }
         this.ws.onmessage = function (e) {
@@ -61,9 +61,9 @@ window.CodeRunner = {
         }
         this.ws.onclose = function () {
             clearTimeout(connectionTimeout);
+            if (self.pingTimer) { clearInterval(self.pingTimer); self.pingTimer = null }
             self.connected = false
             self.warn("connection closed ... reconnecting")
-
             setTimeout(function(){
                 console.warn("....", step+1)
                 self.init(url, step+1)
@@ -71,6 +71,7 @@ window.CodeRunner = {
         }
         this.ws.onerror = function (e) {
             clearTimeout(connectionTimeout);
+            if (self.pingTimer) { clearInterval(self.pingTimer); self.pingTimer = null }
             self.warn("an error has occurred")
         }
     },
