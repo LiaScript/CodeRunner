@@ -284,4 +284,4 @@ RUN printf '#!/bin/bash\n\
 
 EXPOSE 4000
 
-ENTRYPOINT ["python3","-m","server","--host","0.0.0.0","--port","4000"]
+CMD python3 -m server --host 0.0.0.0 --port $PORT
