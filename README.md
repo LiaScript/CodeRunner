@@ -391,6 +391,7 @@ CodeRunner.send(
 @end
 -->
 
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/liascript-coderunner-badge.png)](https://mseep.ai/app/liascript-coderunner)
 
 # CodeRunner
 
