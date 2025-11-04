@@ -20,30 +20,35 @@ from socketserver import TCPServer
 
 coloredlogs.install()
 
-
 class NewWebSocketHandler (WebSocketHandler):
     def read_http_headers(self):
         headers = {}
-        # first line should be HTTP GET
         http_get = self.rfile.readline().decode().strip()
-        
+
         if not http_get.upper().startswith('GET'):
-            logging.warning("Unsupported HTTP method")
-            response = 'HTTP/1.1 400 Bad Request\r\n\r\n'
-            with self._send_lock:
-                self.request.sendall(response.encode())
-            self.keep_alive = False
-            return headers           
-                 
-        
-        #assert http_get.upper().startswith('GET')
-        # remaining should be headers
+            logging.info("Unsupported HTTP method")
+            response = 'HTTP/1.1 405 Method Not Allowed\r\nConnection: close\r\nContent-Length: 0\r\n\r\n'
+            try:
+                with self._send_lock:
+                    self.request.sendall(response.encode())
+            except BrokenPipeError:
+                logging.debug("Client closed before error response could be sent.")
+            except Exception as e:
+                logging.debug("Failed to send error response: %s", e)
+            finally:
+                self.keep_alive = False
+            return headers
+
+        # headers lesen
         while True:
             header = self.rfile.readline().decode().strip()
             if not header:
                 break
-            head, value = header.split(':', 1)
-            headers[head.lower().strip()] = value.strip()
+            try:
+                head, value = header.split(':', 1)
+                headers[head.lower().strip()] = value.strip()
+            except ValueError:
+                logging.debug("Malformed header line ignored: %r", header)
         return headers
 
     def handshake(self):
@@ -64,18 +69,34 @@ class NewWebSocketHandler (WebSocketHandler):
                 return
 
             response = self.make_handshake_response(key)
-            with self._send_lock:
-                self.handshake_done = self.request.send(response.encode())
+            try:
+                with self._send_lock:
+                    self.handshake_done = self.request.send(response.encode())
+            except BrokenPipeError:
+                logging.debug("Client closed during handshake response.")
+                self.keep_alive = False
+                return
             self.valid_client = True
             self.server._new_client_(self)
         else:
-            # timeStr = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            # print(f"请升级到ws协议{timeStr}")
-            response = 'HTTP/1.1 400 Bad Request\r\n\r\n'
-            
-            with self._send_lock:
-                self.request.sendall(response.encode())
-            self.keep_alive = False
+            # Health-Check: freundlich 200 OK und schließen
+            body = b"OK\n"
+            response = (
+                'HTTP/1.1 200 OK\r\n'
+                'Content-Type: text/plain; charset=utf-8\r\n'
+                f'Content-Length: {len(body)}\r\n'
+                'Connection: close\r\n\r\n'
+            ).encode() + body
+            try:
+                with self._send_lock:
+                    self.request.sendall(response)
+            except BrokenPipeError:
+                logging.debug("Client closed before health-check response.")
+            except Exception as e:
+                logging.debug("Failed to send health-check response: %s", e)
+            finally:
+                self.keep_alive = False
+
 
 class Server (WebsocketServer):
     def __init__(self, host='127.0.0.1', port=0, loglevel=logging.WARNING, key=None, cert=None):
@@ -83,17 +104,16 @@ class Server (WebsocketServer):
         TCPServer.__init__(self, (host, port), NewWebSocketHandler)
         self.host = host
         self.port = self.socket.getsockname()[1]
-
         self.key = key
         self.cert = cert
-
         self.clients = []
         self.id_counter = 0
         self.thread = None
-
         self._deny_clients = False
 
-
+    def handle_error(self, request, client_address):
+        # Unterdrücke laute Tracebacks von erwartbaren Client-Abbrüchen
+        logging.debug("Suppressed client error from %s", client_address)
 
 
 class Process:
@@ -511,31 +531,6 @@ def message_received(client, _, message) -> None:
         server.send_message(client, json.dumps({"ok": True, "service": "stop", "uid": message["uid"]}))
 
 
-def handshake(self):
-        headers = self.read_http_headers()
-        if 'upgrade' in headers:
-            
-            try:
-                assert headers['upgrade'].lower() == 'websocket'
-            except AssertionError:
-                self.keep_alive = False
-                return
-
-            try:
-                key = headers['sec-websocket-key']
-            except KeyError:
-                logger.warning("Client tried to connect but was missing a key")
-                self.keep_alive = False
-                return
-
-            response = self.make_handshake_response(key)
-            with self._send_lock:
-                self.handshake_done = self.request.send(response.encode())
-            self.valid_client = True
-            self.server._new_client_(self)
-        else:
-            print("upgrade to ws")
-
 if __name__ == "__main__":
     argv = sys.argv[1:]
 
@@ -569,7 +564,6 @@ if __name__ == "__main__":
     server.set_fn_new_client(new_client)
     server.set_fn_client_left(client_left)
     server.set_fn_message_received(message_received)
-    server.handshake = (handshake)
 
     logging.basicConfig(level=logging.DEBUG)
 
