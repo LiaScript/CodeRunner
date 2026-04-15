@@ -178,7 +178,8 @@ RUN pip3 install --upgrade meson \
     sympy \
     pyyaml \
     pycairo \
-    manim
+    manim \
+    mistralai
 
 ### Clojure
 RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh \
