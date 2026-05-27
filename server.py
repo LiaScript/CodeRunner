@@ -26,18 +26,7 @@ class NewWebSocketHandler (WebSocketHandler):
         http_get = self.rfile.readline().decode().strip()
 
         if not http_get.upper().startswith('GET'):
-            logging.info("Unsupported HTTP method")
-            response = 'HTTP/1.1 405 Method Not Allowed\r\nConnection: close\r\nContent-Length: 0\r\n\r\n'
-            try:
-                with self._send_lock:
-                    self.request.sendall(response.encode())
-            except BrokenPipeError:
-                logging.debug("Client closed before error response could be sent.")
-            except Exception as e:
-                logging.debug("Failed to send error response: %s", e)
-            finally:
-                self.keep_alive = False
-            return headers
+            logging.debug("Non-GET HTTP request, treating as health check: %r", http_get)
 
         # headers lesen
         while True:
@@ -534,8 +523,8 @@ def message_received(client, _, message) -> None:
 if __name__ == "__main__":
     argv = sys.argv[1:]
 
-    PORT = int(os.environ.get('CODERUNNER_PORT') or '8000')
-    HOST = os.environ.get('CODERUNNER_HOST') or '127.0.0.1'
+    PORT = int(os.environ.get('CODERUNNER_PORT') or os.environ.get('PORT') or '8000')
+    HOST = os.environ.get('CODERUNNER_HOST') or '0.0.0.0'
 
     options, args = getopt.getopt(argv, "p:h", ["port=", "host=", "help"])
 
@@ -553,10 +542,10 @@ if __name__ == "__main__":
             print("Options:")
             print()
             print("  -h, --help   Print out the help")
-            print("  -p, --port   Set the server port, this will overwrite the env-variable CODERUNNER_PORT")
+            print("  -p, --port   Set the server port, this will overwrite the env-variable CODERUNNER_PORT or PORT")
             print("               ... defaults to 8000")
             print("  --host       Set the server host, this will overwrite the env-variable CODERUNNER_HOST")
-            print("               ... defaults to 127.0.0.1")
+            print("               ... defaults to 0.0.0.0")
             exit(0)
 
     server = Server(host=HOST, port=PORT)
