@@ -162,11 +162,11 @@ RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
     && rm -rf /root/.choosenim/downloads
 
 ### V-lang
-RUN git clone https://github.com/vlang/v
-RUN cd v &&\
-    make && \
-    ./v symlink && \
-    rm -rf .git
+#RUN git clone https://github.com/vlang/v
+#RUN cd v &&\
+#    make && \
+#    ./v symlink && \
+#    rm -rf .git
 
 ### Python3
 # Install the latest version of meson
