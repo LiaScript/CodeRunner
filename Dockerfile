@@ -56,7 +56,7 @@ RUN apt-get install -y --no-install-recommends \
     # Elixir
     erlang-dev elixir \
     # Latex 
-    texlive-latex-extra \
+    texlive-latex-base \
     # COBOL
     gnucobol \
     # Fortran
@@ -132,7 +132,9 @@ RUN apt-get install -y --no-install-recommends \
     r-base \
     r-cran-car \
     r-cran-mapdata \
-    r-cran-reshape
+    r-cran-reshape && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ##################################################################################
 ### JAVA
@@ -148,27 +150,30 @@ RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
     && ln -s /root/.juliaup/bin/julia /usr/local/bin/julia
 
 ### Zig
-RUN curl -fLO https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz \
-    && tar -xf zig-linux-x86_64-0.14.0.tar.xz \
-    && rm zig-linux-x86_64-0.14.0.tar.xz \
-    && mv zig-linux-x86_64-0.14.0/ /opt/ \
-    && ln -s /opt/zig-linux-x86_64-0.14.0/zig /usr/local/bin/zig
+RUN curl -fLO https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz \
+    && tar -xf zig-x86_64-linux-0.16.0.tar.xz \
+    && rm zig-x86_64-linux-0.16.0.tar.xz \
+    && mv zig-x86_64-linux-0.16.0/ /opt/ \
+    && ln -s /opt/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
 
 ### Nim
 RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
     && sh init.sh -y \
-    && ln -s /root/.nimble/bin/nim /usr/local/bin/nim
+    && ln -s /root/.nimble/bin/nim /usr/local/bin/nim \
+    && rm init.sh \
+    && rm -rf /root/.choosenim/downloads
 
 ### V-lang
 RUN git clone https://github.com/vlang/v
 RUN cd v &&\
     make && \
-    ./v symlink
+    ./v symlink && \
+    rm -rf .git
 
 ### Python3
 # Install the latest version of meson
-RUN pip3 install --upgrade meson \
-    && pip3 install \
+RUN pip3 install --no-cache-dir --upgrade meson \
+    && pip3 install --no-cache-dir \
     matplotlib \
     numpy \
     opencv-python opencv-contrib-python \
@@ -195,14 +200,18 @@ RUN curl -O https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?
 
 ### IO
 # Install dependencies
-RUN apt-get install -y libffi-dev \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libffi-dev \
     libpcre3-dev \
     libxml2-dev \
     libssl-dev \
-    zlib1g-dev
+    zlib1g-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Clone the Io language repository with submodules
-RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
+# Clone the Io language repository with submodules (native branch for CMake build)
+RUN git clone --recurse-submodules --branch native https://github.com/IoLanguage/io.git && \
     cd io && \
     mkdir build && \
     cd build && \
@@ -213,7 +222,8 @@ RUN git clone --recurse-submodules https://github.com/IoLanguage/io.git && \
     rm -rf io
 
 # Solidity
-RUN npm install --global solc
+RUN npm install --global solc && \
+    npm cache clean --force
 
 # Q# (Quantum)
 RUN dotnet tool install -g Microsoft.Quantum.IQSharp
@@ -225,7 +235,9 @@ RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     && git clone --recursive  https://github.com/andre-dietrich/SelectScriptC.git \
     && cd SelectScriptC \
     && make \
-    && make install
+    && make install \
+    && cd / \
+    && rm -rf SelectScriptC
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -234,13 +246,15 @@ RUN apt-get update && \
     gnustep-devel \
     libgnustep-base-dev \
     libblocksruntime-dev \
-    clang
+    clang && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 #############################################################################################
 COPY . /coderunner
 WORKDIR "/coderunner"
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN chmod u+s /usr/bin/firejail
 
