@@ -101,8 +101,6 @@ RUN apt-get install -y --no-install-recommends \
     valac \
     # Standard ML
     smlnj \
-    # Kotlin
-    kotlin \
     # PHP
     php \
     # NodeJS
@@ -150,11 +148,11 @@ RUN curl -fsSL https://install.julialang.org | sh -s -- -y \
     && ln -s /root/.juliaup/bin/julia /usr/local/bin/julia
 
 ### Zig
-RUN curl -fLO https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz \
-    && tar -xf zig-x86_64-linux-0.16.0.tar.xz \
-    && rm zig-x86_64-linux-0.16.0.tar.xz \
-    && mv zig-x86_64-linux-0.16.0/ /opt/ \
-    && ln -s /opt/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
+RUN curl -fLO https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz \
+    && tar -xf zig-linux-x86_64-0.14.0.tar.xz \
+    && rm zig-linux-x86_64-0.14.0.tar.xz \
+    && mv zig-linux-x86_64-0.14.0/ /opt/ \
+    && ln -s /opt/zig-linux-x86_64-0.14.0/zig /usr/local/bin/zig
 
 ### Nim
 RUN curl -O https://nim-lang.org/choosenim/init.sh -sSf \
@@ -215,8 +213,8 @@ RUN git clone --recurse-submodules --branch native https://github.com/IoLanguage
     cd io && \
     mkdir build && \
     cd build && \
-    cmake .. && \
-    make && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    make -j"$(nproc)" && \
     make install && \
     cd ../.. && \
     rm -rf io
@@ -226,7 +224,7 @@ RUN npm install --global solc && \
     npm cache clean --force
 
 # Q# (Quantum)
-RUN dotnet tool install -g Microsoft.Quantum.IQSharp
+#RUN dotnet tool install -g Microsoft.Quantum.IQSharp
 
 # SelectScript
 RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein \
@@ -249,6 +247,17 @@ RUN apt-get update && \
     clang && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+### Kotlin (modern release, compatible with JDK 25)
+RUN KOTLIN_VERSION=$(curl -s https://api.github.com/repos/JetBrains/kotlin/releases/latest \
+        | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'].lstrip('v'))") \
+    && curl -L "https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip" \
+        -o /tmp/kotlin.zip \
+    && python3 -c "import zipfile; zipfile.ZipFile('/tmp/kotlin.zip').extractall('/opt/')" \
+    && rm /tmp/kotlin.zip \
+    && chmod +x /opt/kotlinc/bin/* \
+    && ln -sf /opt/kotlinc/bin/kotlinc /usr/local/bin/kotlinc \
+    && ln -sf /opt/kotlinc/bin/kotlin /usr/local/bin/kotlin
 
 #############################################################################################
 COPY . /coderunner
@@ -299,4 +308,5 @@ RUN printf '#!/bin/bash\n\
 
 EXPOSE 4000
 
+##ENTRYPOINT ["python3","-m","server","--host","0.0.0.0","--port","4000"]
 CMD python3 -m server --host 0.0.0.0 --port $PORT
