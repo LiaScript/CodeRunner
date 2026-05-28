@@ -187,6 +187,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.r:                 @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 @LIA.r_withShell:       @LIA.eval(`["main.R"]`, `none`, `sh -c "cat main.R - | R --interactive"`)
 @LIA.racket:            @LIA.eval(`["main.rkt"]`, `none`, `racket main.rkt`)
+@LIA.rexx:              @LIA.eval(`["main.rexx"]`, `none`, `rexx ./main.rexx`)
 @LIA.ruby:              @LIA.eval(`["main.rb"]`, `none`, `ruby main.rb`)
 @LIA.ruby_withShell:    @LIA.eval(`["main.rb"]`, `none`, `irb --nomultiline -r ./main.rb`)
 @LIA.rust:              @LIA.eval(`["main.rs"]`, `rustc main.rs`, `./main`)
@@ -194,6 +195,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.scheme:            @LIA.eval(`["main.scm"]`, `none`, `guile --no-auto-compile main.scm`)
 @LIA.selectscript:      @LIA.eval(`["main.s2"]`, `none`, `S2c -x main.s2`)
 @LIA.smalltalk:         @LIA.eval(`["main.st"]`, `none`, `gst main.st`)
+@LIA.solidity:          @LIA.eval(`["@0.sol"]`, `solcjs --abi @0.sol`, `python3 -mjson.tool @0_sol_@0.abi`)
 @LIA.tcl:               @LIA.eval(`["main.tcl"]`, `none`, `tclsh main.tcl`)
 @LIA.v:                 @LIA.eval(`["main.v"]`, `v main.v`, `./main`)
 @LIA.v_withShell:       @LIA.eval(`["main.v"]`, `none`, `sh -c "cat main.v - | v repl"`)
@@ -1662,7 +1664,7 @@ For more information, you can visit the [REXX programming language Wikipedia pag
 /* REXX program to display "Hello, world!" */
 say "Hello, world!"
 ```
-@LIA.eval(`["hello.rexx"]`, `none`, `rexx hello.rexx`)
+@LIA.rexx
 
 ### Ruby : `@LIA.ruby`
 
@@ -1856,7 +1858,7 @@ contract HelloWorld {
     }
 }
 ```
-@LIA.eval(`["HelloWorld.sol"]`, `none`, `solcjs --abi HelloWorld.sol`)
+@LIA.solidity(HelloWorld)
 
 ### Scala : `@LIA.scala`
 
@@ -2021,10 +2023,8 @@ For more information, you can visit the [Zig programming language Wikipedia page
 ```zig
 const std = @import("std");
 
-pub fn main() void {
-    std.io.getStdOut().writeAll(
-        "Hello World!",
-    ) catch unreachable;
+pub fn main() !void {
+    try std.io.getStdOut().writeAll("Hello World!\n");
 }
 ```
 @LIA.zig
