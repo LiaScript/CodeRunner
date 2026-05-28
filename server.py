@@ -5,6 +5,7 @@ import shutil
 import tempfile
 import json
 import logging
+import socket
 from typing import List
 import pathlib
 import base64
@@ -23,25 +24,35 @@ coloredlogs.install()
 class NewWebSocketHandler (WebSocketHandler):
     def read_http_headers(self):
         headers = {}
-        http_get = self.rfile.readline().decode().strip()
+        try:
+            self.connection.settimeout(10)  # prevent indefinite blocking on health-check reads
+            http_get = self.rfile.readline().decode().strip()
 
-        if not http_get.upper().startswith('GET'):
-            logging.debug("Non-GET HTTP request, treating as health check: %r", http_get)
+            if not http_get.upper().startswith('GET'):
+                logging.debug("Non-GET HTTP request, treating as health check: %r", http_get)
 
-        # headers lesen
-        while True:
-            header = self.rfile.readline().decode().strip()
-            if not header:
-                break
-            try:
-                head, value = header.split(':', 1)
-                headers[head.lower().strip()] = value.strip()
-            except ValueError:
-                logging.debug("Malformed header line ignored: %r", header)
+            # headers lesen
+            while True:
+                header = self.rfile.readline().decode().strip()
+                if not header:
+                    break
+                try:
+                    head, value = header.split(':', 1)
+                    headers[head.lower().strip()] = value.strip()
+                except ValueError:
+                    logging.debug("Malformed header line ignored: %r", header)
+        except Exception as e:
+            logging.debug("Error reading HTTP headers: %s", e)
+        finally:
+            self.connection.settimeout(None)  # restore blocking mode for WebSocket reads
         return headers
 
     def handshake(self):
-        headers = self.read_http_headers()
+        try:
+            headers = self.read_http_headers()
+        except Exception as e:
+            logging.debug("handshake: failed to read headers: %s", e)
+            headers = {}
 
         if 'upgrade' in headers:
             try:
@@ -79,6 +90,11 @@ class NewWebSocketHandler (WebSocketHandler):
             try:
                 with self._send_lock:
                     self.request.sendall(response)
+                # Send TCP FIN so the client knows the response is complete
+                try:
+                    self.request.shutdown(socket.SHUT_WR)
+                except Exception:
+                    pass
             except BrokenPipeError:
                 logging.debug("Client closed before health-check response.")
             except Exception as e:
