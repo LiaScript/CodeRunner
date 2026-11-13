@@ -55,8 +55,17 @@ RUN apt-get install -y --no-install-recommends \
     gnat-12 \
     # Elixir
     erlang-dev elixir \
-    # Latex 
+    # Latex
+    # texlive-latex-base alone is not enough for Manim's Tex/MathTex:
+    #   - texlive-latex-extra provides standalone.cls + preview.sty
+    #     (Manim's default \documentclass[preview]{standalone})
+    #   - dvisvgm converts the compiled DVI/PDF to SVG (Manim calls it last)
+    #   - fonts-recommended / science avoid follow-up font & amsmath errors
     texlive-latex-base \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-science \
+    dvisvgm \
     # COBOL
     gnucobol \
     # Fortran
