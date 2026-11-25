@@ -154,7 +154,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
 @LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
 @LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
-@LIA.gleam:             @LIA.eval(`["src/main.gleam"]`, `gleam build`, `gleam run --no-print-progress`)
+@LIA.gleam:             @LIA.eval(`["src/main.gleam"]`, `gleam build --no-print-progress`, `gleam run --no-print-progress`)
 @LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 @LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
@@ -1016,7 +1016,7 @@ pub fn hello(name: String) -> String {
   "Hello, " <> name <> "!"
 }
 ```
-@LIA.eval(`["src/main.gleam", "src/greeting.gleam"]`, `gleam build`, `gleam run --no-print-progress`)
+@LIA.eval(`["src/main.gleam", "src/greeting.gleam"]`, `gleam build --no-print-progress`, `gleam run --no-print-progress`)
 
 
 ### GO : `@LIA.go`
@@ -2286,7 +2286,7 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
 @LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
 @LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
-@LIA.gleam:             @LIA.eval(`["src/main.gleam"]`, `gleam build`, `gleam run --no-print-progress`)
+@LIA.gleam:             @LIA.eval(`["src/main.gleam"]`, `gleam build --no-print-progress`, `gleam run --no-print-progress`)
 @LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 @LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
