@@ -154,8 +154,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
 @LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
 @LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
-@LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 @LIA.gleam:             @LIA.eval(`["src/main.gleam"]`, `gleam build`, `gleam run --no-print-progress`)
+@LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 @LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 @LIA.haskell_withShell: @LIA.eval(`["main.hs"]`, `none`, `ghci main.hs`)
@@ -961,6 +961,7 @@ hello
 ```
 @LIA.forth
 
+
 ### Fortran : `@LIA.fortran`
 
 Fortran (Formula Translation) is a high-level programming language developed by IBM in the 1950s for scientific and engineering applications. It is known for its efficiency, numerical accuracy, and extensive library of mathematical functions, making it ideal for numerical computations, simulations, and data analysis. Fortran has evolved over the years, with the latest standard being Fortran 2018, which includes modern features like coarrays, improved parallelism, and interoperability with C. The backend here uses the GNU Fortran compiler (gfortran) to compile Fortran code, ensuring high performance and compatibility with modern Fortran standards.
@@ -975,6 +976,7 @@ program hello
 end program hello
 ```
 @LIA.fortran
+
 
 ### Gleam : `@LIA.gleam`
 
@@ -1017,20 +1019,6 @@ pub fn hello(name: String) -> String {
 @LIA.eval(`["src/main.gleam", "src/greeting.gleam"]`, `gleam build`, `gleam run --no-print-progress`)
 
 
-### Groovy : `@LIA.groovy`
-
-Groovy is a dynamic, object-oriented programming language that runs on the Java Virtual Machine (JVM). It was created by James Strachan and first released in 2003. Groovy is known for its simplicity, flexibility, and seamless integration with Java, allowing developers to write concise and expressive code. It supports features like closures, dynamic typing, and metaprogramming, making it ideal for scripting, web development, and automation tasks. The backend here uses the Groovy compiler to execute Groovy code, ensuring compatibility with the JVM and access to the Java ecosystem.
-
-For more information, you can visit the [Groovy programming language Wikipedia page](https://en.wikipedia.org/wiki/Apache_Groovy).
-
----
-
-```groovy
-println "Hello, world!"
-```
-@LIA.groovy
-
-
 ### GO : `@LIA.go`
 
 Go, also known as Golang, is a statically typed, compiled programming language designed by Google engineers and first released in 2009. It is known for its simplicity, efficiency, and strong support for concurrent programming. Go combines the performance and safety of a compiled language like C with the ease of use and productivity features of dynamically typed languages. It is particularly well-suited for building large-scale, distributed systems, cloud services, and other performance-critical applications. The backend here uses the `golang-go` compiler to compile Go code, ensuring fast and reliable execution.
@@ -1049,6 +1037,21 @@ func main() {
 }
 ```
 @LIA.go
+
+
+### Groovy : `@LIA.groovy`
+
+Groovy is a dynamic, object-oriented programming language that runs on the Java Virtual Machine (JVM). It was created by James Strachan and first released in 2003. Groovy is known for its simplicity, flexibility, and seamless integration with Java, allowing developers to write concise and expressive code. It supports features like closures, dynamic typing, and metaprogramming, making it ideal for scripting, web development, and automation tasks. The backend here uses the Groovy compiler to execute Groovy code, ensuring compatibility with the JVM and access to the Java ecosystem.
+
+For more information, you can visit the [Groovy programming language Wikipedia page](https://en.wikipedia.org/wiki/Apache_Groovy).
+
+---
+
+```groovy
+println "Hello, world!"
+```
+@LIA.groovy
+
 
 ### Haskell : `@LIA.haskell`
 
@@ -2283,8 +2286,8 @@ window.CodeRunner.init("wss://ancient-hollows-41316.herokuapp.com/")
 @LIA.forth:             @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs -e BYE`)
 @LIA.forth_withShell:   @LIA.eval(`["main.fs"]`, `none`, `gforth main.fs`)
 @LIA.fortran:           @LIA.eval(`["main.f90"]`, `gfortran main.f90 -o a.out`, `./a.out`)
-@LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 @LIA.gleam:             @LIA.eval(`["src/main.gleam"]`, `gleam build`, `gleam run --no-print-progress`)
+@LIA.go:                @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 @LIA.groovy:            @LIA.eval(`["main.groovy"]`, `none`, `groovy main.groovy`)
 @LIA.haskell:           @LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 @LIA.haskell_withShell: @LIA.eval(`["main.hs"]`, `none`, `ghci main.hs`)
