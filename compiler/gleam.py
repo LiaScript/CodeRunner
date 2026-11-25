@@ -71,7 +71,7 @@ def relative(path: str, cwd: str) -> str:
         if "/src/" in path:
             return "src/" + path.split("/src/", 1)[1]
 
-    return path.lstrip("./")
+    return path.removeprefix("./")
 
 
 def find_all(output: str, cwd: str) -> list[Problem]:
