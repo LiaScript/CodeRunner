@@ -88,7 +88,7 @@ def formatting(files: List[str], problems) -> List[List[Problem2]]:
     if len(problems) == 0:
         return []
 
-    rslt: List[List[Problem2]] = [[]] * len(files)
+    rslt: List[List[Problem2]] = [[] for _ in files]
 
     index = {}
 
