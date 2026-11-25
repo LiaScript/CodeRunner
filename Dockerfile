@@ -273,12 +273,14 @@ RUN KOTLIN_VERSION=$(curl -s https://api.github.com/repos/JetBrains/kotlin/relea
 # Bun is a single binary with its own name, so it does not touch the system node
 # or erlang that other languages (Elixir, NodeJS, Solidity) depend on.
 # Binaries go to /usr/local/bin, because firejail --private hides /root.
+# The baseline Bun build is used, because the standard x64 build needs AVX2,
+# which older servers, VMs with a default CPU type and Rosetta do not offer.
 ARG GLEAM_VERSION=v1.19.0
 RUN curl -fsSL "https://github.com/gleam-lang/gleam/releases/download/${GLEAM_VERSION}/gleam-${GLEAM_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
         | tar -xz -C /usr/local/bin gleam \
-    && curl -fsSL -o /tmp/bun.zip https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip \
+    && curl -fsSL -o /tmp/bun.zip https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64-baseline.zip \
     && python3 -c "import zipfile; zipfile.ZipFile('/tmp/bun.zip').extractall('/tmp/bun')" \
-    && install -m 755 /tmp/bun/bun-linux-x64/bun /usr/local/bin/bun \
+    && install -m 755 /tmp/bun/bun-linux-x64-baseline/bun /usr/local/bin/bun \
     && rm -rf /tmp/bun /tmp/bun.zip
 
 # Template project with gleam_stdlib downloaded and precompiled, because the
