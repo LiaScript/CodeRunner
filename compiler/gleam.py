@@ -1,12 +1,14 @@
 """
 Gleam support for CodeRunner.
 
-A Gleam program has to live inside a project (gleam.toml + src/), and the
-standard library has to be downloaded from Hex before the first build. The
-execution sandbox has no network, so the Docker image contains a prepared
-template project (GLEAM_TEMPLATE) with gleam_stdlib already downloaded and
-compiled. Before building, the template is copied into the working directory,
-unless the course sends its own gleam.toml.
+A Gleam program has to live inside a project (gleam.toml + src/), and its
+dependencies have to be fetched from Hex and compiled before the first build.
+To avoid doing this for every new project, the Docker image contains a
+prepared template project (GLEAM_TEMPLATE) with gleam_stdlib already
+downloaded and compiled. Before building, the template is copied into the
+working directory, so a build needs no network and only compiles the course's
+own modules. A course that sends its own gleam.toml gets no template, its
+dependencies are then fetched when it is built.
 """
 
 import os

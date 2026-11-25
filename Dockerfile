@@ -283,9 +283,9 @@ RUN curl -fsSL "https://github.com/gleam-lang/gleam/releases/download/${GLEAM_VE
     && install -m 755 /tmp/bun/bun-linux-x64-baseline/bun /usr/local/bin/bun \
     && rm -rf /tmp/bun /tmp/bun.zip
 
-# Template project with gleam_stdlib downloaded and precompiled, because the
-# sandbox (firejail --net=none) cannot reach Hex. compiler/gleam.py copies this
-# into every working directory before `gleam build`.
+# Template project with gleam_stdlib downloaded and precompiled, so a build
+# neither contacts Hex nor compiles the standard library for every new project.
+# compiler/gleam.py copies this into every working directory before `gleam build`.
 ENV GLEAM_TEMPLATE=/opt/gleam-template
 RUN mkdir -p /opt/gleam-template/src && cd /opt/gleam-template \
     && printf 'name = "main"\nversion = "1.0.0"\ntarget = "javascript"\n\n[javascript]\nruntime = "bun"\n\n[dependencies]\ngleam_stdlib = ">= 0.44.0 and < 2.0.0"\n' > gleam.toml \
