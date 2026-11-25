@@ -268,6 +268,34 @@ RUN KOTLIN_VERSION=$(curl -s https://api.github.com/repos/JetBrains/kotlin/relea
     && ln -sf /opt/kotlinc/bin/kotlinc /usr/local/bin/kotlinc \
     && ln -sf /opt/kotlinc/bin/kotlin /usr/local/bin/kotlin
 
+### Gleam (JavaScript target, executed with Bun)
+# Ubuntu 22.04 ships Erlang/OTP 24 and Node.js 12, both too old for current Gleam.
+# Bun is a single binary with its own name, so it does not touch the system node
+# or erlang that other languages (Elixir, NodeJS, Solidity) depend on.
+# Binaries go to /usr/local/bin, because firejail --private hides /root.
+# The baseline Bun build is used, because the standard x64 build needs AVX2,
+# which older servers, VMs with a default CPU type and Rosetta do not offer.
+ARG GLEAM_VERSION=v1.19.0
+ARG BUN_VERSION=v1.4.5
+RUN curl -fsSL "https://github.com/gleam-lang/gleam/releases/download/${GLEAM_VERSION}/gleam-${GLEAM_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+        | tar -xz -C /usr/local/bin gleam \
+    && curl -fsSL -o /tmp/bun.zip "https://github.com/oven-sh/bun/releases/download/bun-${BUN_VERSION}/bun-linux-x64-baseline.zip" \
+    && python3 -c "import zipfile; zipfile.ZipFile('/tmp/bun.zip').extractall('/tmp/bun')" \
+    && install -m 755 /tmp/bun/bun-linux-x64-baseline/bun /usr/local/bin/bun \
+    && rm -rf /tmp/bun /tmp/bun.zip
+
+# Template project with gleam_stdlib downloaded and precompiled, so a build
+# neither contacts Hex nor compiles the standard library for every new project.
+# compiler/gleam.py copies this into every working directory before `gleam build`.
+ENV GLEAM_TEMPLATE=/opt/gleam-template
+RUN mkdir -p /opt/gleam-template/src && cd /opt/gleam-template \
+    && printf 'name = "main"\nversion = "1.0.0"\ntarget = "javascript"\n\n[javascript]\nruntime = "bun"\n\n[dependencies]\ngleam_stdlib = ">= 0.44.0 and < 2.0.0"\n' > gleam.toml \
+    && printf 'import gleam/io\n\npub fn main() {\n  io.println("warm-up")\n}\n' > src/main.gleam \
+    && gleam build \
+    && gleam run --no-print-progress \
+    && rm -rf src build/dev/javascript/main \
+    && chmod -R a+rX /opt/gleam-template
+
 #############################################################################################
 COPY . /coderunner
 WORKDIR "/coderunner"
